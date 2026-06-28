@@ -1,0 +1,39 @@
+<section class="page-head page-head--slim">
+  <div class="container account-head">
+    <div>
+      <p class="eyebrow">Xin chào <%= user.name %></p>
+      <h1 class="page-title">Tài khoản của tôi</h1>
+    </div>
+    <form action="/tai-khoan/dang-xuat" method="post">
+      <button class="btn btn--line btn--sm" type="submit">Đăng xuất</button>
+    </form>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <h2 class="section__title section__title--sm">Lịch sử đơn hàng</h2>
+    <% if (orders.length === 0) { %>
+      <div class="empty">
+        <h3>Bạn chưa có đơn hàng nào</h3>
+        <p>Khám phá cửa hàng và đặt món đồ đầu tiên nhé.</p>
+        <a class="btn btn--primary" href="/cua-hang">Mua sắm ngay</a>
+      </div>
+    <% } else { %>
+      <div class="orders-table">
+        <div class="orders-row orders-row--head">
+          <span>Mã đơn</span><span>Ngày</span><span>Sản phẩm</span><span>Tổng</span><span>Trạng thái</span>
+        </div>
+        <% orders.forEach(function(o){ %>
+          <div class="orders-row">
+            <span class="orders-code"><%= o.code %></span>
+            <span data-label="Ngày"><%= new Date(o.createdAt).toLocaleDateString('vi-VN') %></span>
+            <span data-label="Sản phẩm"><%= o.items.reduce((s,i)=>s+i.quantity,0) %> món</span>
+            <span data-label="Tổng"><b><%= formatVND(o.total) %></b></span>
+            <span data-label="Trạng thái"><span class="badge badge--<%= o.status %>"><%= ORDER_STATUS[o.status] %></span></span>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

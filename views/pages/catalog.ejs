@@ -1,0 +1,56 @@
+<section class="page-head">
+  <div class="container">
+    <nav class="crumbs" aria-label="breadcrumb">
+      <a href="/">Trang chủ</a><span>/</span>
+      <% if (category) { %><a href="/cua-hang">Cửa hàng</a><span>/</span><span><%= category.name %></span>
+      <% } else { %><span>Cửa hàng</span><% } %>
+    </nav>
+    <p class="eyebrow"><%= category ? category.tagline : 'Tất cả sản phẩm' %></p>
+    <h1 class="page-title"><%= category ? category.name : 'Cửa hàng' %></h1>
+    <% if (category) { %><p class="page-desc"><%= category.description %></p><% } %>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <form class="toolbar" method="get">
+      <p class="toolbar__count"><strong><%= products.length %></strong> sản phẩm<% if (q) { %> cho “<%= q %>”<% } %></p>
+      <% if (q) { %><input type="hidden" name="q" value="<%= q %>" /><% } %>
+      <div class="toolbar__filters">
+        <div class="price-filter">
+          <span>Giá (₫)</span>
+          <input type="number" name="min" min="0" step="50000" placeholder="Từ" value="<%= min %>" aria-label="Giá từ" />
+          <span class="price-filter__dash">–</span>
+          <input type="number" name="max" min="0" step="50000" placeholder="Đến" value="<%= max %>" aria-label="Giá đến" />
+        </div>
+        <label class="select">
+          <span>Sắp xếp</span>
+          <select name="sort">
+            <option value="moi-nhat" <%= sort==='moi-nhat'?'selected':'' %>>Mới nhất</option>
+            <option value="gia-tang" <%= sort==='gia-tang'?'selected':'' %>>Giá: thấp đến cao</option>
+            <option value="gia-giam" <%= sort==='gia-giam'?'selected':'' %>>Giá: cao đến thấp</option>
+            <option value="ten-az" <%= sort==='ten-az'?'selected':'' %>>Tên: A → Z</option>
+          </select>
+        </label>
+        <button type="submit" class="btn btn--line btn--sm">Áp dụng</button>
+        <% if (q || min || max || sort !== 'moi-nhat') { %>
+          <a href="<%= category ? '/danh-muc/' + category.slug : '/cua-hang' %>" class="filter-reset">Xoá lọc</a>
+        <% } %>
+      </div>
+    </form>
+
+    <% if (products.length === 0) { %>
+      <div class="empty">
+        <h3>Chưa tìm thấy sản phẩm phù hợp</h3>
+        <p>Thử từ khoá khác hoặc xem toàn bộ cửa hàng.</p>
+        <a class="btn btn--line" href="/cua-hang">Xem tất cả</a>
+      </div>
+    <% } else { %>
+      <div class="product-grid">
+        <% products.forEach(function(p){ %>
+          <%- include('../partials/product-card', { product: p }) %>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

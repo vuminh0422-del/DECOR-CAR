@@ -1,0 +1,56 @@
+<div class="panel__head panel__head--bare">
+  <a class="link-more" href="/quan-tri/don-hang">← Tất cả đơn hàng</a>
+</div>
+
+<div class="order-detail">
+  <div class="panel">
+    <div class="panel__head">
+      <h2>Đơn <%= order.code %></h2>
+      <span class="badge badge--<%= order.status %>"><%= ORDER_STATUS[order.status] %></span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Sản phẩm</th><th>Đơn giá</th><th>SL</th><th>Thành tiền</th></tr></thead>
+      <tbody>
+        <% order.items.forEach(function(it){ %>
+          <tr>
+            <td><a href="/san-pham/<%= it.slug %>" target="_blank" rel="noopener"><%= it.name %></a></td>
+            <td><%= formatVND(it.price) %></td>
+            <td><%= it.quantity %></td>
+            <td><%= formatVND(it.lineTotal) %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <div class="order-totals">
+      <div class="summary-row"><span>Tạm tính</span><b><%= formatVND(order.subtotal) %></b></div>
+      <div class="summary-row"><span>Vận chuyển</span><b><%= order.shipping === 0 ? 'Miễn phí' : formatVND(order.shipping) %></b></div>
+      <div class="summary-row summary-row--total"><span>Tổng cộng</span><b><%= formatVND(order.total) %></b></div>
+    </div>
+  </div>
+
+  <aside class="order-side">
+    <div class="panel">
+      <div class="panel__head"><h2>Khách hàng</h2></div>
+      <ul class="kv">
+        <li><span>Họ tên</span><b><%= order.customer.name %></b></li>
+        <li><span>Điện thoại</span><b><%= order.customer.phone %></b></li>
+        <li><span>Email</span><b><%= order.customer.email || '—' %></b></li>
+        <li><span>Địa chỉ</span><b><%= order.customer.address %></b></li>
+        <li><span>Thanh toán</span><b><%= order.payment === 'bank' ? 'Chuyển khoản' : 'COD' %></b></li>
+        <% if (order.note) { %><li><span>Ghi chú</span><b><%= order.note %></b></li><% } %>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel__head"><h2>Cập nhật trạng thái</h2></div>
+      <form action="/quan-tri/don-hang/<%= order.id %>/trang-thai" method="post" class="status-form">
+        <select name="status">
+          <% Object.keys(statuses).forEach(function(key){ %>
+            <option value="<%= key %>" <%= order.status===key ? 'selected':'' %>><%= statuses[key] %></option>
+          <% }) %>
+        </select>
+        <button type="submit" class="btn btn--primary btn--block">Lưu trạng thái</button>
+      </form>
+    </div>
+  </aside>
+</div>

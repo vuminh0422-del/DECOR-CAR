@@ -1,0 +1,153 @@
+<section class="page-head page-head--slim">
+  <div class="container">
+    <nav class="crumbs" aria-label="breadcrumb">
+      <a href="/">Trang chủ</a><span>/</span>
+      <% if (category) { %><a href="/danh-muc/<%= category.slug %>"><%= category.name %></a><span>/</span><% } %>
+      <span><%= product.name %></span>
+    </nav>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container product-detail">
+    <div class="gallery" data-gallery>
+      <div class="gallery__main frame frame--lg">
+        <img src="<%= product.images[0] %>" alt="<%= product.name %>" id="galleryMain" width="800" height="1000" />
+      </div>
+      <% if (product.images.length > 1) { %>
+        <div class="gallery__thumbs">
+          <% product.images.forEach(function(img, i){ %>
+            <button type="button" class="gallery__thumb frame <%= i===0?'is-active':'' %>" data-src="<%= img %>" aria-label="Ảnh <%= i+1 %>">
+              <img src="<%= img %>" alt="" width="160" height="200" loading="lazy" />
+            </button>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="product-info">
+      <% if (category) { %><p class="eyebrow"><%= category.name %></p><% } %>
+      <h1 class="product-info__title"><%= product.name %></h1>
+
+      <% if (rating.count > 0) { %>
+        <a href="#danh-gia" class="rating-inline">
+          <span class="stars" aria-hidden="true"><%= starString(rating.average) %></span>
+          <span class="rating-inline__num"><%= rating.average %></span>
+          <span class="rating-inline__count">(<%= rating.count %> đánh giá)</span>
+        </a>
+      <% } %>
+
+      <div class="product-info__price">
+        <span class="price price--lg"><%= formatVND(product.price) %></span>
+        <% if (product.compareAt && product.compareAt > product.price) { %>
+          <span class="price price--old"><%= formatVND(product.compareAt) %></span>
+          <span class="save-tag">Tiết kiệm <%= formatVND(product.compareAt - product.price) %></span>
+        <% } %>
+      </div>
+
+      <p class="product-info__desc"><%= product.description %></p>
+
+      <ul class="spec">
+        <li><span>Mã sản phẩm</span><b><%= product.sku %></b></li>
+        <li><span>Tình trạng</span><b><%= product.stock > 0 ? 'Còn hàng' : 'Liên hệ' %></b></li>
+        <li><span>Danh mục</span><b><%= category ? category.name : '—' %></b></li>
+      </ul>
+
+      <form action="/gio-hang/them" method="post" class="buy">
+        <input type="hidden" name="productId" value="<%= product.id %>" />
+        <div class="qty" data-qty>
+          <button type="button" class="qty__btn" data-step="-1" aria-label="Giảm">−</button>
+          <input type="number" name="quantity" value="1" min="1" max="<%= Math.max(1, product.stock) %>" aria-label="Số lượng" />
+          <button type="button" class="qty__btn" data-step="1" aria-label="Tăng">+</button>
+        </div>
+        <div class="buy__actions">
+          <button type="submit" class="btn btn--line">Thêm vào giỏ</button>
+          <button type="submit" name="buyNow" value="1" class="btn btn--primary">Mua ngay</button>
+        </div>
+      </form>
+
+      <div class="assurance">
+        <span>✓ Giao &amp; lắp đặt tận nơi</span>
+        <span>✓ Bảo hành chính hãng</span>
+        <span>✓ Tư vấn miễn phí</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="danh-gia">
+  <div class="container">
+    <div class="reviews">
+      <div class="reviews__head">
+        <p class="eyebrow">Phản hồi khách hàng</p>
+        <h2 class="section__title">Đánh giá sản phẩm</h2>
+        <% if (rating.count > 0) { %>
+          <div class="reviews__score">
+            <b><%= rating.average %></b>
+            <span class="stars" aria-hidden="true"><%= starString(rating.average) %></span>
+            <span><%= rating.count %> lượt đánh giá</span>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="reviews__body">
+        <div class="reviews__list">
+          <% if (reviewSent) { %>
+            <div class="form-alert form-alert--success" role="status">Cảm ơn bạn đã đánh giá!</div>
+          <% } %>
+          <% if (reviews.length === 0) { %>
+            <p class="reviews__empty">Chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ cảm nhận!</p>
+          <% } else { %>
+            <% reviews.forEach(function(r){ %>
+              <article class="review">
+                <div class="review__top">
+                  <b class="review__name"><%= r.name %></b>
+                  <span class="stars stars--sm" aria-label="<%= r.rating %> trên 5 sao"><%= starString(r.rating) %></span>
+                </div>
+                <p class="review__comment"><%= r.comment %></p>
+                <time class="review__date"><%= new Date(r.createdAt).toLocaleDateString('vi-VN') %></time>
+              </article>
+            <% }) %>
+          <% } %>
+        </div>
+
+        <aside class="review-form frame">
+          <h3>Viết đánh giá</h3>
+          <form action="/san-pham/<%= product.slug %>/danh-gia" method="post">
+            <div class="field">
+              <label for="rv-name">Tên của bạn</label>
+              <input id="rv-name" name="name" placeholder="Ví dụ: Anh Minh" />
+            </div>
+            <div class="field">
+              <label>Chấm điểm</label>
+              <div class="star-input" data-star-input>
+                <% for (var s=5; s>=1; s--){ %>
+                  <input type="radio" id="star<%= s %>" name="rating" value="<%= s %>" <%= s===5?'checked':'' %> />
+                  <label for="star<%= s %>" aria-label="<%= s %> sao">★</label>
+                <% } %>
+              </div>
+            </div>
+            <div class="field">
+              <label for="rv-comment">Nhận xét</label>
+              <textarea id="rv-comment" name="comment" rows="3" placeholder="Chất lượng, lắp đặt, độ bền…" required></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary btn--block">Gửi đánh giá</button>
+          </form>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% if (related.length) { %>
+<section class="section section--tight">
+  <div class="container">
+    <div class="section__head"><p class="eyebrow">Gợi ý</p><h2 class="section__title">Sản phẩm liên quan</h2></div>
+    <div class="product-grid">
+      <% related.forEach(function(p){ %>
+        <%- include('../partials/product-card', { product: p }) %>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>

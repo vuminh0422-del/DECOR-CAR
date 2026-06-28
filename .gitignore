@@ -1,0 +1,15 @@
+node_modules/
+.env
+npm-debug.log*
+yarn-error.log*
+*.log
+
+# Dữ liệu runtime & file upload do người dùng tải lên (không commit)
+src/db/data.json
+public/uploads/*
+!public/uploads/.gitkeep
+
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

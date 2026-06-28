@@ -1,0 +1,25 @@
+<div class="panel">
+  <div class="panel__head">
+    <h2>Đơn hàng (<%= orders.length %>)</h2>
+  </div>
+  <% if (orders.length === 0) { %>
+    <p class="panel__empty">Chưa có đơn hàng nào.</p>
+  <% } else { %>
+    <table class="data-table">
+      <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>SĐT</th><th>Ngày</th><th>Tổng</th><th>TT</th><th>Trạng thái</th></tr></thead>
+      <tbody>
+        <% orders.forEach(function(o){ %>
+          <tr>
+            <td><a href="/quan-tri/don-hang/<%= o.code %>"><%= o.code %></a></td>
+            <td><%= o.customer.name %></td>
+            <td><%= o.customer.phone %></td>
+            <td><%= new Date(o.createdAt).toLocaleDateString('vi-VN') %></td>
+            <td><%= formatVND(o.total) %></td>
+            <td><%= o.payment === 'bank' ? 'CK' : 'COD' %></td>
+            <td><span class="badge badge--<%= o.status %>"><%= ORDER_STATUS[o.status] %></span></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

@@ -1,0 +1,35 @@
+<div class="panel">
+  <div class="panel__head">
+    <h2>Sản phẩm (<%= products.length %>)</h2>
+    <a class="btn btn--primary btn--sm" href="/quan-tri/san-pham/moi">+ Thêm sản phẩm</a>
+  </div>
+
+  <% if (products.length === 0) { %>
+    <p class="panel__empty">Chưa có sản phẩm. Hãy thêm sản phẩm đầu tiên.</p>
+  <% } else { %>
+    <table class="data-table data-table--products">
+      <thead><tr><th>Ảnh</th><th>Tên</th><th>Danh mục</th><th>Giá</th><th>Kho</th><th></th></tr></thead>
+      <tbody>
+        <% products.forEach(function(p){ %>
+          <% var cat = categories.find(function(c){return c.slug===p.categorySlug}); %>
+          <tr>
+            <td><img class="thumb" src="<%= p.images[0] %>" alt="" width="48" height="60" /></td>
+            <td>
+              <a href="/san-pham/<%= p.slug %>" target="_blank" rel="noopener"><%= p.name %></a>
+              <% if (p.featured) { %><span class="pill">Nổi bật</span><% } %>
+            </td>
+            <td><%= cat ? cat.name : '—' %></td>
+            <td><%= formatVND(p.price) %></td>
+            <td><%= p.stock %></td>
+            <td class="row-actions">
+              <a href="/quan-tri/san-pham/<%= p.id %>/sua">Sửa</a>
+              <form action="/quan-tri/san-pham/<%= p.id %>?_method=DELETE" method="post" onsubmit="return confirm('Xoá sản phẩm “<%= p.name %>”?');">
+                <button type="submit" class="link-danger">Xoá</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

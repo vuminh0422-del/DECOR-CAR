@@ -1,0 +1,82 @@
+<section class="page-head page-head--slim">
+  <div class="container">
+    <nav class="crumbs"><a href="/">Trang chủ</a><span>/</span><span>Giỏ hàng</span></nav>
+    <h1 class="page-title">Giỏ hàng</h1>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <% if (cart.items.length === 0) { %>
+      <div class="empty">
+        <h3>Giỏ hàng đang trống</h3>
+        <p>Hãy khám phá bộ sưu tập và thêm những món đồ bạn yêu thích.</p>
+        <a class="btn btn--primary" href="/cua-hang">Bắt đầu mua sắm</a>
+      </div>
+    <% } else { %>
+      <div class="cart-layout">
+        <div class="cart-items">
+          <div class="cart-row cart-row--head">
+            <span>Sản phẩm</span><span>Đơn giá</span><span>Số lượng</span><span>Thành tiền</span><span></span>
+          </div>
+          <% cart.items.forEach(function(it){ %>
+            <div class="cart-row">
+              <div class="cart-prod">
+                <a class="frame cart-prod__img" href="/san-pham/<%= it.product.slug %>">
+                  <img src="<%= it.product.images[0] %>" alt="<%= it.product.name %>" width="120" height="150" />
+                </a>
+                <div>
+                  <a class="cart-prod__name" href="/san-pham/<%= it.product.slug %>"><%= it.product.name %></a>
+                  <p class="cart-prod__sku"><%= it.product.sku %></p>
+                </div>
+              </div>
+              <div class="cart-cell" data-label="Đơn giá"><%= formatVND(it.product.price) %></div>
+              <div class="cart-cell" data-label="Số lượng">
+                <form action="/gio-hang/cap-nhat" method="post" class="qty qty--sm" data-qty data-autosubmit>
+                  <input type="hidden" name="productId" value="<%= it.product.id %>" />
+                  <button type="button" class="qty__btn" data-step="-1" aria-label="Giảm">−</button>
+                  <input type="number" name="quantity" value="<%= it.quantity %>" min="0" aria-label="Số lượng" />
+                  <button type="button" class="qty__btn" data-step="1" aria-label="Tăng">+</button>
+                </form>
+              </div>
+              <div class="cart-cell cart-cell--total" data-label="Thành tiền"><%= formatVND(it.lineTotal) %></div>
+              <div class="cart-cell cart-cell--remove">
+                <form action="/gio-hang/xoa" method="post">
+                  <input type="hidden" name="productId" value="<%= it.product.id %>" />
+                  <button type="submit" class="link-remove" aria-label="Xoá">Xoá</button>
+                </form>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+
+        <aside class="cart-summary">
+          <h2>Tóm tắt đơn</h2>
+
+          <div class="coupon">
+            <% if (cart.coupon) { %>
+              <div class="coupon__applied">
+                <span><b><%= cart.coupon.code %></b> · <%= cart.coupon.label %></span>
+                <form action="/gio-hang/go-ma" method="post"><button type="submit" class="link-remove">Gỡ</button></form>
+              </div>
+            <% } else { %>
+              <form action="/gio-hang/ma-giam-gia" method="post" class="coupon__form">
+                <input type="text" name="code" placeholder="Nhập mã giảm giá" aria-label="Mã giảm giá" />
+                <button type="submit" class="btn btn--ghost btn--sm">Áp dụng</button>
+              </form>
+            <% } %>
+          </div>
+
+          <div class="summary-row"><span>Tạm tính</span><b><%= cart.subtotalLabel %></b></div>
+          <% if (cart.discount > 0) { %>
+            <div class="summary-row summary-row--save"><span>Giảm giá</span><b>−<%= formatVND(cart.discount) %></b></div>
+          <% } %>
+          <div class="summary-row summary-row--muted"><span>Phí vận chuyển</span><span>Tính ở bước thanh toán</span></div>
+          <div class="summary-row summary-row--total"><span>Tổng cộng</span><b><%= formatVND(cart.total) %></b></div>
+          <a href="/thanh-toan" class="btn btn--primary btn--block">Tiến hành thanh toán</a>
+          <a href="/cua-hang" class="link-more link-more--center">Tiếp tục mua sắm</a>
+        </aside>
+      </div>
+    <% } %>
+  </div>
+</section>

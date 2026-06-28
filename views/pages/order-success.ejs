@@ -1,0 +1,42 @@
+<section class="section">
+  <div class="container">
+    <div class="success">
+      <div class="success__badge frame" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="24" r="20"/><path d="m15 24 6 6 12-12"/></svg>
+      </div>
+      <p class="eyebrow">Cảm ơn bạn</p>
+      <h1 class="success__title">Đặt hàng thành công</h1>
+      <p class="success__lead">Đơn hàng <b><%= order.code %></b> đã được ghi nhận. Chúng tôi sẽ liên hệ qua số điện thoại <b><%= order.customer.phone %></b> để xác nhận trong thời gian sớm nhất.</p>
+
+      <div class="receipt">
+        <div class="receipt__head">
+          <span>Mã đơn: <b><%= order.code %></b></span>
+          <span>Trạng thái: <b><%= ORDER_STATUS[order.status] %></b></span>
+        </div>
+        <ul class="receipt__items">
+          <% order.items.forEach(function(it){ %>
+            <li><span><%= it.quantity %>× <%= it.name %></span><b><%= formatVND(it.lineTotal) %></b></li>
+          <% }) %>
+        </ul>
+        <div class="summary-row"><span>Tạm tính</span><b><%= formatVND(order.subtotal) %></b></div>
+        <% if (order.discount && order.discount > 0) { %>
+          <div class="summary-row summary-row--save"><span>Giảm giá<% if (order.coupon) { %> (<%= order.coupon %>)<% } %></span><b>−<%= formatVND(order.discount) %></b></div>
+        <% } %>
+        <div class="summary-row"><span>Vận chuyển</span><b><%= order.shipping === 0 ? 'Miễn phí' : formatVND(order.shipping) %></b></div>
+        <div class="summary-row summary-row--total"><span>Tổng cộng</span><b><%= formatVND(order.total) %></b></div>
+        <% if (order.payment === 'bank') { %>
+          <div class="bank-note">
+            <p>Vui lòng chuyển khoản theo thông tin:</p>
+            <p><b><%= store.bankName %></b> · <%= store.bankAccount %> · <%= store.bankHolder %></p>
+            <p>Nội dung: <b><%= order.code %> <%= order.customer.name %></b></p>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="success__cta">
+        <a href="/cua-hang" class="btn btn--primary">Tiếp tục mua sắm</a>
+        <% if (user) { %><a href="/tai-khoan" class="btn btn--line">Xem đơn của tôi</a><% } %>
+      </div>
+    </div>
+  </div>
+</section>

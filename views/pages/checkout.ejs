@@ -1,0 +1,86 @@
+<section class="page-head page-head--slim">
+  <div class="container">
+    <nav class="crumbs"><a href="/">Trang chủ</a><span>/</span><a href="/gio-hang">Giỏ hàng</a><span>/</span><span>Thanh toán</span></nav>
+    <h1 class="page-title">Thanh toán</h1>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <form action="/thanh-toan" method="post" class="checkout" novalidate>
+      <div class="checkout__main">
+        <fieldset class="field-group">
+          <legend>Thông tin nhận hàng</legend>
+
+          <div class="field <%= errors.name ? 'has-error' : '' %>">
+            <label for="name">Họ và tên <span class="req">*</span></label>
+            <input id="name" name="name" value="<%= form.name || '' %>" autocomplete="name" required />
+            <% if (errors.name) { %><p class="field__err"><%= errors.name %></p><% } %>
+          </div>
+
+          <div class="field-row">
+            <div class="field <%= errors.phone ? 'has-error' : '' %>">
+              <label for="phone">Số điện thoại <span class="req">*</span></label>
+              <input id="phone" name="phone" type="tel" inputmode="tel" value="<%= form.phone || '' %>" autocomplete="tel" required />
+              <% if (errors.phone) { %><p class="field__err"><%= errors.phone %></p><% } %>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" value="<%= form.email || '' %>" autocomplete="email" />
+            </div>
+          </div>
+
+          <div class="field <%= errors.address ? 'has-error' : '' %>">
+            <label for="address">Địa chỉ nhận hàng <span class="req">*</span></label>
+            <input id="address" name="address" value="<%= form.address || '' %>" autocomplete="street-address" required />
+            <% if (errors.address) { %><p class="field__err"><%= errors.address %></p><% } %>
+          </div>
+
+          <div class="field">
+            <label for="note">Ghi chú (tuỳ chọn)</label>
+            <textarea id="note" name="note" rows="3" placeholder="Thời gian giao thuận tiện, hướng dẫn lắp đặt…"><%= form.note || '' %></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="field-group">
+          <legend>Phương thức thanh toán</legend>
+          <label class="pay-option">
+            <input type="radio" name="payment" value="cod" <%= form.payment !== 'bank' ? 'checked' : '' %> />
+            <span class="pay-option__body">
+              <b>Thanh toán khi nhận hàng (COD)</b>
+              <small>Trả tiền mặt cho nhân viên giao hàng khi nhận sản phẩm.</small>
+            </span>
+          </label>
+          <label class="pay-option">
+            <input type="radio" name="payment" value="bank" <%= form.payment === 'bank' ? 'checked' : '' %> />
+            <span class="pay-option__body">
+              <b>Chuyển khoản ngân hàng</b>
+              <small><%= store.bankName %> · <%= store.bankAccount %> · <%= store.bankHolder %>. Nội dung: họ tên + SĐT.</small>
+            </span>
+          </label>
+        </fieldset>
+      </div>
+
+      <aside class="checkout__summary">
+        <h2>Đơn hàng của bạn</h2>
+        <ul class="mini-cart">
+          <% cart.items.forEach(function(it){ %>
+            <li>
+              <span class="mini-cart__qty"><%= it.quantity %>×</span>
+              <span class="mini-cart__name"><%= it.product.name %></span>
+              <span class="mini-cart__price"><%= formatVND(it.lineTotal) %></span>
+            </li>
+          <% }) %>
+        </ul>
+        <div class="summary-row"><span>Tạm tính</span><b><%= formatVND(totals.subtotal) %></b></div>
+        <% if (totals.discount > 0) { %>
+          <div class="summary-row summary-row--save"><span>Giảm giá<% if (totals.coupon) { %> (<%= totals.coupon.code %>)<% } %></span><b>−<%= formatVND(totals.discount) %></b></div>
+        <% } %>
+        <div class="summary-row"><span>Vận chuyển</span><b><%= totals.shipping === 0 ? 'Miễn phí' : formatVND(totals.shipping) %></b></div>
+        <div class="summary-row summary-row--total"><span>Tổng cộng</span><b><%= formatVND(totals.total) %></b></div>
+        <button type="submit" class="btn btn--primary btn--block">Đặt hàng</button>
+        <p class="checkout__note">Bằng việc đặt hàng, bạn đồng ý với điều khoản mua bán của DECOR CAR.</p>
+      </aside>
+    </form>
+  </div>
+</section>

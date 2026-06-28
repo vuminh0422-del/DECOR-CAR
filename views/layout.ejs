@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %></title>
+  <meta name="description" content="DECOR CAR — Nội thất, đồ trang trí và phụ kiện trang trí xe hơi cao cấp. Tuyển chọn theo chất liệu và tỉ lệ." />
+  <meta name="theme-color" content="#15140F" />
+  <meta property="og:title" content="<%= title %>" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+  <%- include('partials/header') %>
+
+  <% if (flash) { %>
+    <div class="flash flash--<%= flash.type %>" role="status">
+      <div class="container"><%= flash.message %></div>
+    </div>
+  <% } %>
+
+  <main id="main">
+    <%- body %>
+  </main>
+
+  <%- include('partials/footer') %>
+  <script src="/js/main.js" defer></script>
+</body>
+</html>

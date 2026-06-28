@@ -1,0 +1,52 @@
+<article class="post">
+  <header class="post__head">
+    <div class="container post__head-inner">
+      <nav class="crumbs"><a href="/">Trang chủ</a><span>/</span><a href="/blog">Blog</a><span>/</span><span><%= post.tag %></span></nav>
+      <p class="eyebrow"><%= post.tag %></p>
+      <h1 class="post__title"><%= post.title %></h1>
+      <p class="post__meta"><%= post.author %> · <%= new Date(post.date).toLocaleDateString('vi-VN') %> · <%= post.readMinutes %> phút đọc</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="post__cover frame frame--lg">
+      <img src="/img/ph/<%= encodeURIComponent(post.title) %>?tone=<%= post.cover %>" alt="<%= post.title %>" width="1200" height="675" />
+    </div>
+
+    <div class="post__body">
+      <p class="post__lead"><%= post.excerpt %></p>
+      <% post.body.forEach(function(para){ %>
+        <p><%= para %></p>
+      <% }) %>
+
+      <div class="post__cta">
+        <p>Cần tư vấn nâng cấp nội thất xe của bạn?</p>
+        <a href="/cua-hang" class="btn btn--primary">Xem sản phẩm</a>
+        <a href="/lien-he" class="btn btn--line">Liên hệ tư vấn</a>
+      </div>
+    </div>
+  </div>
+</article>
+
+<% if (related.length) { %>
+<section class="section section--tight">
+  <div class="container">
+    <div class="section__head"><p class="eyebrow">Đọc thêm</p><h2 class="section__title">Bài viết khác</h2></div>
+    <div class="blog-grid">
+      <% related.forEach(function(post){ %>
+        <article class="blog-card">
+          <a class="blog-card__media frame" href="/blog/<%= post.slug %>">
+            <img src="/img/ph/<%= encodeURIComponent(post.title) %>?tone=<%= post.cover %>" alt="<%= post.title %>" loading="lazy" width="800" height="500" />
+            <span class="blog-card__tag"><%= post.tag %></span>
+          </a>
+          <div class="blog-card__body">
+            <p class="blog-card__meta"><%= new Date(post.date).toLocaleDateString('vi-VN') %> · <%= post.readMinutes %> phút đọc</p>
+            <h2 class="blog-card__title"><a href="/blog/<%= post.slug %>"><%= post.title %></a></h2>
+            <p class="blog-card__excerpt"><%= post.excerpt %></p>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>

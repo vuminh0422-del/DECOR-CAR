@@ -1,0 +1,21 @@
+<div class="panel">
+  <div class="panel__head"><h2>Đánh giá sản phẩm (<%= reviews.length %>)</h2></div>
+  <% if (reviews.length === 0) { %>
+    <p class="panel__empty">Chưa có đánh giá nào.</p>
+  <% } else { %>
+    <table class="data-table">
+      <thead><tr><th>Sản phẩm</th><th>Khách</th><th>Điểm</th><th>Nhận xét</th><th>Ngày</th></tr></thead>
+      <tbody>
+        <% reviews.forEach(function(r){ %>
+          <tr>
+            <td><% if (r.product) { %><a href="/san-pham/<%= r.product.slug %>" target="_blank" rel="noopener"><%= r.product.name %></a><% } else { %>—<% } %></td>
+            <td><%= r.name %></td>
+            <td style="color:var(--brass-deep);white-space:nowrap"><%= '★'.repeat(r.rating) %></td>
+            <td><%= r.comment %></td>
+            <td><%= new Date(r.createdAt).toLocaleDateString('vi-VN') %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

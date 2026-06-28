@@ -1,0 +1,136 @@
+<section class="hero">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow">Nội thất &amp; phụ kiện xe ô tô</p>
+      <h1 class="hero__title">Khoang lái của bạn,<br /><em>nâng tầm tinh tế.</em></h1>
+      <p class="hero__lead">DECOR CAR tuyển chọn từng món nội thất và phụ kiện xe hơi theo chất liệu thật — da Nappa, vân gỗ, carbon — để mỗi hành trình đều xứng tầm chủ nhân.</p>
+      <div class="hero__cta">
+        <a href="/cua-hang" class="btn btn--primary">Khám phá sản phẩm</a>
+        <a href="/danh-muc/noi-that-xe" class="btn btn--line">Nội thất xe</a>
+      </div>
+      <dl class="hero__stats">
+        <div><dt>500+</dt><dd>Sản phẩm tuyển chọn</dd></div>
+        <div><dt>4 năm</dt><dd>Đồng hành cùng khách hàng</dd></div>
+        <div><dt>Tận nơi</dt><dd>Giao &amp; lắp đặt</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero__media">
+      <div class="frame frame--lg hero__img hero__img--main">
+        <img src="/img/ph/Khoang lái bọc da Nappa?tone=ink" alt="Nội thất xe bọc da cao cấp" width="800" height="1000" />
+      </div>
+      <div class="frame hero__img hero__img--sm">
+        <img src="/img/ph/Ốp nội thất vân gỗ?tone=walnut" alt="Ốp nội thất vân gỗ" width="800" height="1000" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <p class="eyebrow">Danh mục</p>
+      <h2 class="section__title">Mọi thứ cho khoang lái</h2>
+    </div>
+    <div class="cat-grid">
+      <% categories.forEach(function(c){ %>
+        <a class="cat-card cat-card--<%= c.tone %> frame" href="/danh-muc/<%= c.slug %>">
+          <div class="cat-card__top">
+            <span class="cat-card__index"><%= String(c.id).padStart(2,'0') %></span>
+            <span class="cat-card__name"><%= c.name %></span>
+          </div>
+          <div class="cat-card__bottom">
+            <p><%= c.tagline %></p>
+            <span class="cat-card__go">Xem danh mục →</span>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="section__head section__head--row">
+      <div>
+        <p class="eyebrow">Tuyển chọn nổi bật</p>
+        <h2 class="section__title">Được yêu thích nhất</h2>
+      </div>
+      <a class="link-more" href="/cua-hang">Tất cả sản phẩm →</a>
+    </div>
+    <div class="product-grid">
+      <% featured.forEach(function(p){ %>
+        <%- include('../partials/product-card', { product: p }) %>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="story">
+  <div class="container story__grid">
+    <div class="story__media frame frame--lg">
+      <img src="/img/ph/Chi tiết da và chỉ may?tone=brass" alt="Chi tiết chất liệu da" width="800" height="1000" />
+    </div>
+    <div class="story__copy">
+      <p class="eyebrow eyebrow--light">Triết lý</p>
+      <h2 class="story__title">Chất liệu kể câu chuyện, không phải nhãn mác.</h2>
+      <p>Chúng tôi tin một sản phẩm tốt bắt đầu từ chất liệu trung thực và đường hoàn thiện tỉ mỉ. Mỗi món nội thất xe — từ bộ ghế da đến tấm ốp vân gỗ — đều được chọn theo cùng một tiêu chuẩn về độ bền và cảm giác chạm.</p>
+      <ul class="story__list">
+        <li>Da Nappa &amp; vân gỗ thật, hoàn thiện tỉ mỉ</li>
+        <li>Đo ni &amp; may ôm form theo từng dòng xe</li>
+        <li>Bảo hành &amp; hỗ trợ lắp đặt tận nơi</li>
+      </ul>
+      <a href="/gioi-thieu" class="btn btn--line btn--light">Câu chuyện DECOR CAR</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="section__head section__head--row">
+      <div>
+        <p class="eyebrow">Vừa lên kệ</p>
+        <h2 class="section__title">Mới nhất tại cửa hàng</h2>
+      </div>
+      <a class="link-more" href="/cua-hang?sort=moi-nhat">Xem thêm →</a>
+    </div>
+    <div class="product-grid">
+      <% newest.forEach(function(p){ %>
+        <%- include('../partials/product-card', { product: p }) %>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="benefits">
+  <div class="container benefits__grid">
+    <div class="benefit">
+      <span class="benefit__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
+      </span>
+      <h3>Giao &amp; lắp tận nơi</h3>
+      <p>Đội ngũ vận chuyển và lắp đặt chuyên nghiệp tại nhà hoặc tại gara.</p>
+    </div>
+    <div class="benefit">
+      <span class="benefit__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l8 3v6c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+      </span>
+      <h3>Bảo hành chính hãng</h3>
+      <p>Cam kết chất liệu thật, đổi trả minh bạch và bảo hành dài hạn.</p>
+    </div>
+    <div class="benefit">
+      <span class="benefit__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 5h16v11H7l-3 3z"/><path d="M8 9h8M8 12h5"/></svg>
+      </span>
+      <h3>Tư vấn không gian</h3>
+      <p>Gợi ý phối hợp đồ nội thất và phụ kiện theo phong cách của bạn.</p>
+    </div>
+    <div class="benefit">
+      <span class="benefit__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2v20M2 12h20" opacity=".25"/><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      </span>
+      <h3>Đặt hàng dễ dàng</h3>
+      <p>Thanh toán COD hoặc chuyển khoản, theo dõi đơn ngay trên tài khoản.</p>
+    </div>
+  </div>
+</section>

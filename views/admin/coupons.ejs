@@ -1,0 +1,63 @@
+<div class="order-detail">
+  <div class="panel">
+    <div class="panel__head"><h2>Mã giảm giá (<%= coupons.length %>)</h2></div>
+    <% if (coupons.length === 0) { %>
+      <p class="panel__empty">Chưa có mã giảm giá nào.</p>
+    <% } else { %>
+      <table class="data-table">
+        <thead><tr><th>Mã</th><th>Loại</th><th>Giá trị</th><th>Đơn tối thiểu</th><th></th></tr></thead>
+        <tbody>
+          <% coupons.forEach(function(c){ %>
+            <tr>
+              <td><b><%= c.code %></b><% if (c.description) { %><br><small style="color:var(--stone)"><%= c.description %></small><% } %></td>
+              <td><%= c.type === 'percent' ? 'Phần trăm' : 'Số tiền' %></td>
+              <td><%= c.type === 'percent' ? c.value + '%' : formatVND(c.value) %></td>
+              <td><%= c.minSubtotal ? formatVND(c.minSubtotal) : '—' %></td>
+              <td class="row-actions">
+                <form action="/quan-tri/khuyen-mai/<%= c.code %>?_method=DELETE" method="post" onsubmit="return confirm('Xoá mã <%= c.code %>?');">
+                  <button type="submit" class="link-danger">Xoá</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+
+  <aside class="panel panel--form" style="max-width:none">
+    <div class="panel__head"><h2>Thêm mã mới</h2></div>
+    <form action="/quan-tri/khuyen-mai" method="post" class="admin-form">
+      <div class="field <%= errors.code ? 'has-error' : '' %>">
+        <label for="code">Mã (chữ in hoa, không dấu)</label>
+        <input id="code" name="code" value="<%= form.code || '' %>" placeholder="VD: SALE20" style="text-transform:uppercase" />
+        <% if (errors.code) { %><p class="field__err"><%= errors.code %></p><% } %>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="type">Loại giảm</label>
+          <select id="type" name="type">
+            <option value="percent" <%= form.type==='percent'?'selected':'' %>>Phần trăm (%)</option>
+            <option value="fixed" <%= form.type==='fixed'?'selected':'' %>>Số tiền (₫)</option>
+          </select>
+        </div>
+        <div class="field <%= errors.value ? 'has-error' : '' %>">
+          <label for="value">Giá trị</label>
+          <input id="value" name="value" type="number" min="0" value="<%= form.value || '' %>" />
+          <% if (errors.value) { %><p class="field__err"><%= errors.value %></p><% } %>
+        </div>
+        <div class="field">
+          <label for="minSubtotal">Đơn tối thiểu (₫)</label>
+          <input id="minSubtotal" name="minSubtotal" type="number" min="0" value="<%= form.minSubtotal || '' %>" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="description">Mô tả (tuỳ chọn)</label>
+        <input id="description" name="description" value="<%= form.description || '' %>" />
+      </div>
+      <div class="admin-form__actions">
+        <button type="submit" class="btn btn--primary">Thêm mã</button>
+      </div>
+    </form>
+  </aside>
+</div>

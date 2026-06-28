@@ -1,0 +1,44 @@
+<section class="page-head page-head--slim">
+  <div class="container">
+    <nav class="crumbs"><a href="/">Trang chủ</a><span>/</span><span>Liên hệ</span></nav>
+    <p class="eyebrow">Kết nối</p>
+    <h1 class="page-title">Liên hệ DECOR CAR</h1>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container contact-grid">
+    <div class="contact-info">
+      <h2 class="section__title section__title--sm">Thông tin cửa hàng</h2>
+      <ul class="contact-list">
+        <li><span>Hotline</span><a href="tel:<%= store.phone.replace(/\s/g,'') %>"><%= store.phone %></a></li>
+        <li><span>Zalo</span><a href="https://zalo.me/<%= store.zalo %>"><%= store.zalo %></a></li>
+        <li><span>Email</span><a href="mailto:<%= store.email %>"><%= store.email %></a></li>
+        <li><span>Địa chỉ</span><span><%= store.address %></span></li>
+        <li><span>Giờ mở cửa</span><span>8:00 – 21:00 (T2 – CN)</span></li>
+      </ul>
+    </div>
+
+    <div class="contact-form frame">
+      <% if (sent) { %>
+        <div class="form-alert form-alert--success" role="status">Cảm ơn bạn! Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.</div>
+      <% } %>
+      <h2 class="section__title section__title--sm">Gửi yêu cầu tư vấn</h2>
+      <form action="/lien-he" method="post">
+        <div class="field">
+          <label for="name">Họ và tên</label>
+          <input id="name" name="name" required />
+        </div>
+        <div class="field">
+          <label for="phone">Số điện thoại</label>
+          <input id="phone" name="phone" type="tel" required />
+        </div>
+        <div class="field">
+          <label for="message">Nội dung</label>
+          <textarea id="message" name="message" rows="4" placeholder="Bạn cần tư vấn về sản phẩm nào?"></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary btn--block">Gửi liên hệ</button>
+      </form>
+    </div>
+  </div>
+</section>

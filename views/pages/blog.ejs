@@ -1,0 +1,33 @@
+<section class="page-head">
+  <div class="container">
+    <nav class="crumbs"><a href="/">Trang chủ</a><span>/</span><span>Blog</span></nav>
+    <p class="eyebrow">Kiến thức &amp; kinh nghiệm</p>
+    <h1 class="page-title">Blog DECOR CAR</h1>
+    <p class="page-desc">Mẹo độ xe, kinh nghiệm chọn nội thất và chăm sóc khoang lái — chia sẻ từ đội ngũ DECOR CAR.</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <% if (posts.length === 0) { %>
+      <div class="empty"><h3>Chưa có bài viết</h3><p>Nội dung sẽ sớm được cập nhật.</p></div>
+    <% } else { %>
+      <div class="blog-grid">
+        <% posts.forEach(function(post){ %>
+          <article class="blog-card">
+            <a class="blog-card__media frame" href="/blog/<%= post.slug %>">
+              <img src="/img/ph/<%= encodeURIComponent(post.title) %>?tone=<%= post.cover %>" alt="<%= post.title %>" loading="lazy" width="800" height="500" />
+              <span class="blog-card__tag"><%= post.tag %></span>
+            </a>
+            <div class="blog-card__body">
+              <p class="blog-card__meta"><%= new Date(post.date).toLocaleDateString('vi-VN') %> · <%= post.readMinutes %> phút đọc</p>
+              <h2 class="blog-card__title"><a href="/blog/<%= post.slug %>"><%= post.title %></a></h2>
+              <p class="blog-card__excerpt"><%= post.excerpt %></p>
+              <a class="link-more" href="/blog/<%= post.slug %>">Đọc tiếp →</a>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

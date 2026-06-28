@@ -1,0 +1,24 @@
+<section class="section auth-section">
+  <div class="container">
+    <div class="auth-card frame">
+      <p class="eyebrow">Chào mừng trở lại</p>
+      <h1 class="auth-card__title">Đăng nhập</h1>
+      <% if (error) { %><div class="form-alert" role="alert"><%= error %></div><% } %>
+      <form action="/tai-khoan/dang-nhap" method="post" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" value="<%= form.email || '' %>" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="password">Mật khẩu</label>
+          <div class="pw" data-pw>
+            <input id="password" name="password" type="password" autocomplete="current-password" required />
+            <button type="button" class="pw__toggle" aria-label="Hiện mật khẩu">Hiện</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn--primary btn--block">Đăng nhập</button>
+      </form>
+      <p class="auth-alt">Chưa có tài khoản? <a href="/tai-khoan/dang-ky">Đăng ký ngay</a></p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,22 @@
+<article class="card">
+  <a class="card__media frame" href="/san-pham/<%= product.slug %>">
+    <img src="<%= product.images[0] %>" alt="<%= product.name %>" loading="lazy" width="800" height="1000" />
+    <% if (product.compareAt && product.compareAt > product.price) { %>
+      <span class="card__tag">Ưu đãi</span>
+    <% } %>
+  </a>
+  <div class="card__body">
+    <p class="card__eyebrow"><%= (categories || []).find(function(c){return c.slug===product.categorySlug}) ? (categories.find(function(c){return c.slug===product.categorySlug}).name) : '' %></p>
+    <h3 class="card__title"><a href="/san-pham/<%= product.slug %>"><%= product.name %></a></h3>
+    <div class="card__price">
+      <span class="price"><%= formatVND(product.price) %></span>
+      <% if (product.compareAt && product.compareAt > product.price) { %>
+        <span class="price price--old"><%= formatVND(product.compareAt) %></span>
+      <% } %>
+    </div>
+    <form action="/gio-hang/them" method="post" class="card__add">
+      <input type="hidden" name="productId" value="<%= product.id %>" />
+      <button type="submit" class="btn btn--ghost btn--block">Thêm vào giỏ</button>
+    </form>
+  </div>
+</article>

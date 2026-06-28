@@ -1,0 +1,73 @@
+<div class="panel panel--form">
+  <div class="panel__head">
+    <h2><%= product ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới' %></h2>
+    <a class="link-more" href="/quan-tri/san-pham">← Quay lại danh sách</a>
+  </div>
+
+  <form action="<%= product && product.id ? '/quan-tri/san-pham/' + product.id : '/quan-tri/san-pham' %>" method="post" enctype="multipart/form-data" class="admin-form">
+    <div class="field <%= errors.name ? 'has-error' : '' %>">
+      <label for="name">Tên sản phẩm</label>
+      <input id="name" name="name" value="<%= product ? product.name : '' %>" required />
+      <% if (errors.name) { %><p class="field__err"><%= errors.name %></p><% } %>
+    </div>
+
+    <div class="field-row">
+      <div class="field <%= errors.categorySlug ? 'has-error' : '' %>">
+        <label for="categorySlug">Danh mục</label>
+        <select id="categorySlug" name="categorySlug">
+          <option value="">— Chọn danh mục —</option>
+          <% categories.forEach(function(c){ %>
+            <option value="<%= c.slug %>" <%= product && product.categorySlug===c.slug ? 'selected':'' %>><%= c.name %></option>
+          <% }) %>
+        </select>
+        <% if (errors.categorySlug) { %><p class="field__err"><%= errors.categorySlug %></p><% } %>
+      </div>
+      <div class="field">
+        <label for="sku">Mã SKU</label>
+        <input id="sku" name="sku" value="<%= product ? (product.sku || '') : '' %>" placeholder="Tự sinh nếu để trống" />
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field <%= errors.price ? 'has-error' : '' %>">
+        <label for="price">Giá bán (₫)</label>
+        <input id="price" name="price" type="number" min="0" value="<%= product ? product.price : '' %>" required />
+        <% if (errors.price) { %><p class="field__err"><%= errors.price %></p><% } %>
+      </div>
+      <div class="field">
+        <label for="compareAt">Giá gốc (₫) — tuỳ chọn</label>
+        <input id="compareAt" name="compareAt" type="number" min="0" value="<%= product && product.compareAt ? product.compareAt : '' %>" />
+      </div>
+      <div class="field">
+        <label for="stock">Tồn kho</label>
+        <input id="stock" name="stock" type="number" min="0" value="<%= product ? product.stock : 10 %>" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="description">Mô tả</label>
+      <textarea id="description" name="description" rows="4"><%= product ? product.description : '' %></textarea>
+    </div>
+
+    <div class="field">
+      <label for="images">Ảnh sản phẩm (có thể chọn nhiều, tối đa 6)</label>
+      <input id="images" name="images" type="file" accept="image/*" multiple />
+      <% if (product && product.images && product.images.length) { %>
+        <p class="field__hint">Ảnh hiện tại — tải ảnh mới sẽ thay thế toàn bộ:</p>
+        <div class="img-preview">
+          <% product.images.forEach(function(img){ %><img src="<%= img %>" alt="" width="60" height="75" /><% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <label class="check">
+      <input type="checkbox" name="featured" <%= product && product.featured ? 'checked' : '' %> />
+      <span>Hiển thị ở mục “Nổi bật” trên trang chủ</span>
+    </label>
+
+    <div class="admin-form__actions">
+      <button type="submit" class="btn btn--primary"><%= product && product.id ? 'Lưu thay đổi' : 'Thêm sản phẩm' %></button>
+      <a href="/quan-tri/san-pham" class="btn btn--line">Huỷ</a>
+    </div>
+  </form>
+</div>

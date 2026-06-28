@@ -1,0 +1,46 @@
+<div class="stat-grid">
+  <div class="stat-card">
+    <span class="stat-card__label">Doanh thu</span>
+    <b class="stat-card__value"><%= formatVND(stats.revenue) %></b>
+    <span class="stat-card__hint">Không tính đơn đã huỷ</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-card__label">Đơn hàng</span>
+    <b class="stat-card__value"><%= stats.orders %></b>
+    <span class="stat-card__hint"><%= stats.pending %> đơn chờ xử lý</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-card__label">Sản phẩm</span>
+    <b class="stat-card__value"><%= stats.products %></b>
+    <span class="stat-card__hint">Đang kinh doanh</span>
+  </div>
+  <div class="stat-card stat-card--accent">
+    <span class="stat-card__label">Thao tác nhanh</span>
+    <a class="btn btn--primary btn--sm" href="/quan-tri/san-pham/moi">+ Thêm sản phẩm</a>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel__head">
+    <h2>Đơn hàng gần đây</h2>
+    <a class="link-more" href="/quan-tri/don-hang">Xem tất cả →</a>
+  </div>
+  <% if (recent.length === 0) { %>
+    <p class="panel__empty">Chưa có đơn hàng nào.</p>
+  <% } else { %>
+    <table class="data-table">
+      <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Ngày</th><th>Tổng</th><th>Trạng thái</th></tr></thead>
+      <tbody>
+        <% recent.forEach(function(o){ %>
+          <tr>
+            <td><a href="/quan-tri/don-hang/<%= o.code %>"><%= o.code %></a></td>
+            <td><%= o.customer.name %></td>
+            <td><%= new Date(o.createdAt).toLocaleDateString('vi-VN') %></td>
+            <td><%= formatVND(o.total) %></td>
+            <td><span class="badge badge--<%= o.status %>"><%= ORDER_STATUS[o.status] %></span></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
