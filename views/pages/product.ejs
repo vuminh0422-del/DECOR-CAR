@@ -51,6 +51,14 @@
         <li><span>Mã sản phẩm</span><b><%= product.sku %></b></li>
         <li><span>Tình trạng</span><b><%= product.stock > 0 ? 'Còn hàng' : 'Liên hệ' %></b></li>
         <li><span>Danh mục</span><b><%= category ? category.name : '—' %></b></li>
+        <li>
+          <span>Tương thích</span>
+          <b>
+            <% if (product.universalFit) { %>Mọi dòng xe
+            <% } else if (product.brands && product.brands.length) { %><%= product.brands.map(function(s){ return brandName(s); }).join(', ') %>
+            <% } else { %>Liên hệ tư vấn theo xe<% } %>
+          </b>
+        </li>
       </ul>
 
       <form action="/gio-hang/them" method="post" class="buy">
@@ -74,6 +82,31 @@
     </div>
   </div>
 </section>
+
+<% if (typeof addOns !== 'undefined' && addOns.length) { %>
+<section class="section section--tight addons">
+  <div class="container">
+    <div class="section__head"><p class="eyebrow">Hoàn thiện khoang lái</p><h2 class="section__title section__title--sm">Phụ kiện nên mua kèm</h2></div>
+    <div class="addon-grid">
+      <% addOns.forEach(function(a){ %>
+        <div class="addon">
+          <a class="addon__media frame" href="/san-pham/<%= a.slug %>">
+            <img src="<%= a.images[0] %>" alt="<%= a.name %>" loading="lazy" width="400" height="500" />
+          </a>
+          <div class="addon__body">
+            <h3 class="addon__name"><a href="/san-pham/<%= a.slug %>"><%= a.name %></a></h3>
+            <span class="price"><%= formatVND(a.price) %></span>
+            <form action="/gio-hang/them" method="post" class="addon__add">
+              <input type="hidden" name="productId" value="<%= a.id %>" />
+              <button type="submit" class="btn btn--ghost btn--sm">+ Thêm vào giỏ</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
 
 <section class="section section--tight" id="danh-gia">
   <div class="container">
@@ -151,3 +184,47 @@
   </div>
 </section>
 <% } %>
+
+<!-- Thanh mua nhanh dính đáy màn hình (chỉ hiện trên mobile) -->
+<div class="buybar" data-buybar>
+  <div class="buybar__info">
+    <span class="buybar__name"><%= product.name %></span>
+    <span class="buybar__price"><%= formatVND(product.price) %></span>
+  </div>
+  <form action="/gio-hang/them" method="post" class="buybar__form">
+    <input type="hidden" name="productId" value="<%= product.id %>" />
+    <button type="submit" class="btn btn--primary btn--sm" <%= product.stock === 0 ? 'disabled' : '' %>>
+      <%= product.stock === 0 ? 'Liên hệ' : 'Thêm vào giỏ' %>
+    </button>
+  </form>
+</div>
+
+<script type="application/ld+json">
+<%- JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.name,
+  description: product.description,
+  sku: product.sku,
+  category: category ? category.name : undefined,
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'VND',
+    price: product.price,
+    availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+  },
+  aggregateRating: rating.count > 0 ? {
+    '@type': 'AggregateRating',
+    ratingValue: rating.average,
+    reviewCount: rating.count
+  } : undefined,
+  review: (reviews || []).slice(0, 5).map(function(r){
+    return {
+      '@type': 'Review',
+      author: { '@type': 'Person', name: r.name },
+      reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
+      reviewBody: r.comment
+    };
+  })
+}) %>
+</script>

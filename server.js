@@ -10,7 +10,7 @@ const methodOverride = require('method-override');
 
 const cartMiddleware = require('./src/middleware/cart');
 const { currentUser } = require('./src/middleware/auth');
-const { formatVND, ORDER_STATUS, starString, couponLabel } = require('./src/util');
+const { formatVND, ORDER_STATUS, starString, couponLabel, CAR_BRANDS, brandName } = require('./src/util');
 const { renderPlaceholder } = require('./src/placeholder');
 const db = require('./src/db/database');
 
@@ -60,6 +60,9 @@ app.use((req, res, next) => {
   };
   res.locals.currentPath = req.path;
   res.locals.categories = db.categories(); // dùng ở header/footer mọi trang
+  res.locals.carBrands = CAR_BRANDS; // bộ chọn "Tìm đồ theo dòng xe"
+  res.locals.brandName = brandName;
+  res.locals.ratingFor = db.ratingFor; // để card sản phẩm hiển thị sao + số đánh giá
   res.locals.formatVND = formatVND;
   res.locals.starString = starString;
   res.locals.couponLabel = couponLabel;

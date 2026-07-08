@@ -66,6 +66,21 @@
     });
   });
 
+  // ----- Thanh mua dính đáy (mobile): hiện khi nút mua chính cuộn khỏi màn hình -----
+  const buybar = document.querySelector('[data-buybar]');
+  const buyForm = document.querySelector('.buy');
+  if (buybar && buyForm && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (e) {
+          buybar.classList.toggle('is-visible', !e.isIntersecting);
+        });
+      },
+      { rootMargin: '0px 0px -40px 0px' }
+    );
+    io.observe(buyForm);
+  }
+
   // ----- Ẩn flash sau vài giây -----
   const flash = document.querySelector('.flash');
   if (flash) {

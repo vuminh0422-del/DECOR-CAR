@@ -13,6 +13,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json">
+  <%- JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Store',
+    name: 'DECOR CAR',
+    description: 'Nội thất, đồ trang trí và phụ kiện xe hơi cao cấp — tuyển chọn theo chất liệu.',
+    telephone: store.phone,
+    email: store.email,
+    address: { '@type': 'PostalAddress', addressLocality: store.address, addressCountry: 'VN' }
+  }) %>
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>

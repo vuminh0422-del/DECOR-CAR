@@ -93,11 +93,35 @@ const rawProducts = [
     'Bộ dưỡng và làm sạch da, nhựa, taplo — trả lại vẻ như mới cho nội thất xe.'],
 ];
 
+// Tương thích dòng xe.
+//  - Món "đo ni theo xe" (bọc ghế, ốp nội thất, thảm định hình) → gắn danh sách hãng cụ thể.
+//  - Phụ kiện dùng chung mọi xe (đèn, camera, tẩu sạc, nước hoa, gối…) → universalFit = true.
+// Nhờ vậy bộ lọc "Tìm đồ theo dòng xe" cho kết quả có ý nghĩa (vừa món riêng, vừa món dùng chung).
+const fitBySlug = {
+  'boc-ghe-da-nappa-premium': ['toyota', 'honda', 'mazda', 'mercedes', 'vinfast'],
+  'op-noi-that-van-go-veneer': ['toyota', 'honda', 'kia', 'mercedes'],
+  'op-noi-that-van-carbon': ['ford', 'mazda', 'hyundai', 'vinfast'],
+  'tham-lot-san-6d-carbon': ['toyota', 'honda', 'hyundai', 'kia', 'ford', 'mazda', 'vinfast', 'mercedes', 'mitsubishi'],
+  'tham-lot-san-da-pu-cao-cap': ['toyota', 'mazda', 'kia', 'mercedes', 'vinfast'],
+  'tham-lot-cop-dinh-hinh': ['toyota', 'honda', 'hyundai', 'ford'],
+  'tham-taplo-chong-nang': ['toyota', 'honda', 'kia', 'hyundai'],
+};
+// Món đo ni nhưng bán cho mọi xe (bọc vô lăng, tựa đầu, bọc cần số) vẫn coi là dùng chung.
+const universalSlugs = new Set([
+  'boc-vo-lang-da-khau-tay',
+  'tua-dau-da-memory-foam',
+  'boc-can-so-bao-tay-phanh',
+]);
+
 const products = rawProducts.map((row, i) => {
   const [name, catSlug, price, compareAt, tone, featured, description] = row;
+  const slug = slugify(name);
+  const fittedBrands = fitBySlug[slug] || null;
+  const universalFit = !fittedBrands && (universalSlugs.has(slug)
+    || catSlug === 'den-phu-kien' || catSlug === 'cham-soc-trang-tri');
   return {
     id: i + 1,
-    slug: slugify(name),
+    slug,
     name,
     categorySlug: catSlug,
     price,
@@ -105,6 +129,8 @@ const products = rawProducts.map((row, i) => {
     tone,
     featured: !!featured,
     description,
+    brands: fittedBrands || [],
+    universalFit,
     images: [
       `/img/ph/${encodeURIComponent(name)}?tone=${tone}&v=1`,
       `/img/ph/${encodeURIComponent(name + ' · chi tiết')}?tone=${tone}&v=2`,

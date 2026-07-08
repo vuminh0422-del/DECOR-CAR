@@ -1,13 +1,35 @@
+<%
+  var _r = (typeof ratingFor === 'function') ? ratingFor(product.id) : { average: 0, count: 0 };
+  var _stock = product.stock || 0;
+  var _hasSecond = product.images && product.images.length > 1;
+%>
 <article class="card">
   <a class="card__media frame" href="/san-pham/<%= product.slug %>">
-    <img src="<%= product.images[0] %>" alt="<%= product.name %>" loading="lazy" width="800" height="1000" />
+    <img class="card__img card__img--front" src="<%= product.images[0] %>" alt="<%= product.name %>" loading="lazy" width="800" height="1000" />
+    <% if (_hasSecond) { %>
+      <img class="card__img card__img--back" src="<%= product.images[1] %>" alt="" aria-hidden="true" loading="lazy" width="800" height="1000" />
+    <% } %>
     <% if (product.compareAt && product.compareAt > product.price) { %>
       <span class="card__tag">Ưu đãi</span>
+    <% } %>
+    <% if (_stock === 0) { %>
+      <span class="card__tag card__tag--out">Tạm hết</span>
+    <% } else if (_stock <= 5) { %>
+      <span class="card__tag card__tag--low">Sắp hết</span>
     <% } %>
   </a>
   <div class="card__body">
     <p class="card__eyebrow"><%= (categories || []).find(function(c){return c.slug===product.categorySlug}) ? (categories.find(function(c){return c.slug===product.categorySlug}).name) : '' %></p>
     <h3 class="card__title"><a href="/san-pham/<%= product.slug %>"><%= product.name %></a></h3>
+    <div class="card__rating">
+      <% if (_r.count > 0) { %>
+        <span class="stars stars--sm" aria-hidden="true"><%= starString(_r.average) %></span>
+        <span class="card__rating-num"><%= _r.average %></span>
+        <span class="card__rating-count">(<%= _r.count %>)</span>
+      <% } else { %>
+        <span class="card__rating-none">Chưa có đánh giá</span>
+      <% } %>
+    </div>
     <div class="card__price">
       <span class="price"><%= formatVND(product.price) %></span>
       <% if (product.compareAt && product.compareAt > product.price) { %>
@@ -16,7 +38,9 @@
     </div>
     <form action="/gio-hang/them" method="post" class="card__add">
       <input type="hidden" name="productId" value="<%= product.id %>" />
-      <button type="submit" class="btn btn--ghost btn--block">Thêm vào giỏ</button>
+      <button type="submit" class="btn btn--ghost btn--block" <%= _stock === 0 ? 'disabled' : '' %>>
+        <%= _stock === 0 ? 'Liên hệ đặt hàng' : 'Thêm vào giỏ' %>
+      </button>
     </form>
   </div>
 </article>

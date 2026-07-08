@@ -46,6 +46,16 @@ function renderCatalog(req, res, category) {
     );
   }
 
+  // Lọc theo dòng xe: món dùng chung (universalFit) luôn hiện, kèm món hợp hãng đã chọn.
+  const brand = (req.query.brand || '').trim().toLowerCase();
+  if (brand) {
+    list = list.filter((p) => p.universalFit || (p.brands || []).includes(brand));
+  }
+
+  // Chỉ hiển thị sản phẩm còn hàng
+  const instock = req.query.instock === '1';
+  if (instock) list = list.filter((p) => (p.stock || 0) > 0);
+
   // Lọc theo khoảng giá
   const min = parseInt(req.query.min, 10);
   const max = parseInt(req.query.max, 10);
@@ -70,6 +80,8 @@ function renderCatalog(req, res, category) {
     sort,
     min: req.query.min || '',
     max: req.query.max || '',
+    brand,
+    instock,
   });
 }
 
@@ -88,15 +100,40 @@ router.get('/san-pham/:slug', (req, res) => {
     .filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id)
     .slice(0, 4);
 
+  // Gợi ý mua kèm: ưu tiên phụ kiện dùng chung ở danh mục KHÁC (bổ trợ, không trùng nhóm).
+  const addOns = db
+    .products()
+    .filter((p) => p.id !== product.id && p.categorySlug !== product.categorySlug && p.universalFit)
+    .sort((a, b) => (b.featured === a.featured ? 0 : b.featured ? 1 : -1))
+    .slice(0, 3);
+
   res.render('pages/product', {
     title: product.name + ' — DECOR CAR',
     product,
     category,
     related,
+    addOns,
     reviews: db.reviewsByProduct(product.id),
     rating: db.ratingFor(product.id),
     reviewSent: req.query.danhgia === 'ok',
   });
+});
+
+// Đăng ký nhận ưu đãi — trả về mã giảm giá lần đầu (WELCOME10 đã seed sẵn).
+router.post('/dang-ky-nhan-tin', (req, res) => {
+  const email = (req.body.email || '').trim();
+  const ok = /.+@.+\..+/.test(email);
+  const welcome = db.couponByCode('WELCOME10');
+  const code = welcome && welcome.active ? welcome.code : null;
+  req.session.flash = ok
+    ? {
+        type: 'success',
+        message: code
+          ? `Cảm ơn bạn! Dùng mã ${code} để giảm 10% cho đơn đầu tiên (đơn từ 500.000₫).`
+          : 'Cảm ơn bạn đã đăng ký nhận ưu đãi từ DECOR CAR!',
+      }
+    : { type: 'error', message: 'Email chưa hợp lệ, vui lòng kiểm tra lại.' };
+  res.redirect(req.get('referer') || '/');
 });
 
 // Gửi đánh giá sản phẩm

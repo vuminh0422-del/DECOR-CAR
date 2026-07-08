@@ -526,11 +526,12 @@ input, textarea, select, button { font-family: inherit; }
    Responsive
    ============================================================ */
 @media (max-width: 1024px) {
-  .product-grid, .cat-grid, .benefits__grid, .blog-grid { grid-template-columns: repeat(2, 1fr); }
+  .product-grid, .cat-grid, .benefits__grid, .blog-grid, .addon-grid { grid-template-columns: repeat(2, 1fr); }
   .footer__grid { grid-template-columns: 1fr 1fr; }
-  .hero__grid, .story__grid, .product-detail, .checkout, .cart-layout, .about-grid, .contact-grid, .reviews__body, .order-detail { grid-template-columns: 1fr; }
+  .hero__grid, .story__grid, .product-detail, .checkout, .cart-layout, .about-grid, .contact-grid, .reviews__body, .order-detail, .finder__inner { grid-template-columns: 1fr; }
   .hero__media { max-width: 520px; }
   .checkout__summary, .cart-summary, .review-form { position: static; }
+  .trust__grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 720px) {
@@ -567,9 +568,11 @@ input, textarea, select, button { font-family: inherit; }
 }
 
 @media (max-width: 720px) {
-  .blog-grid { grid-template-columns: 1fr; }
+  .blog-grid, .addon-grid { grid-template-columns: 1fr; }
   .toolbar { flex-direction: column; align-items: flex-start; }
-  .toolbar__filters { width: 100%; }
+  .toolbar__filters { width: 100%; flex-wrap: wrap; }
+  .buybar { display: flex; }
+  main { padding-bottom: 0; }
 }
 
 @media (max-width: 460px) {
@@ -577,6 +580,75 @@ input, textarea, select, button { font-family: inherit; }
   .cat-grid, .benefits__grid, .footer__grid { grid-template-columns: 1fr; }
   .hero__stats { gap: 1.4rem; }
 }
+
+/* ---------- Bộ chọn dòng xe (finder) ---------- */
+.finder { background: var(--ink); color: var(--paper); padding: clamp(2rem, 5vw, 3.2rem) 0; }
+.finder__inner { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(1.5rem, 4vw, 3rem); align-items: center; }
+.finder__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.6rem, 3.2vw, 2.3rem); line-height: 1.12; margin-bottom: .7rem; }
+.finder__lead { color: #d8d2c4; font-size: .95rem; max-width: 46ch; }
+.finder__form { display: flex; gap: .8rem; align-items: flex-end; flex-wrap: wrap; }
+.select--block { flex: 1; min-width: 180px; flex-direction: column; align-items: stretch; gap: .4rem; color: #cfc9bb; }
+.select--block > span { font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; }
+.select--block select { width: 100%; padding: .8rem .9rem; }
+.finder__form .btn { white-space: nowrap; }
+
+/* ---------- Dải cam kết (trust strip) ---------- */
+.trust { background: var(--paper-2); border-block: 1px solid var(--line); }
+.trust__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem 1.6rem; padding: 1.4rem 0; }
+.trust__item { display: flex; align-items: center; gap: .8rem; }
+.trust__icon { color: var(--brass-deep); flex-shrink: 0; display: inline-flex; }
+.trust__item b { display: block; font-size: .9rem; font-family: var(--font-display); font-weight: 400; }
+.trust__item span { display: block; font-size: .78rem; color: var(--stone); }
+
+/* ---------- Checkbox lọc ---------- */
+.check { display: inline-flex; align-items: center; gap: .45rem; font-size: .82rem; color: var(--ink-soft); cursor: pointer; }
+.check input { accent-color: var(--brass-deep); width: 16px; height: 16px; }
+
+/* ---------- Card: ảnh hover + sao + tồn kho ---------- */
+.card__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.card__img--back { opacity: 0; transition: opacity .5s var(--ease); }
+.card:hover .card__img--back { opacity: 1; }
+.card__tag--out { background: var(--ink); color: var(--paper); left: auto; right: 16px; }
+.card__tag--low { background: #f7efdd; color: #946a16; left: auto; right: 16px; }
+.card__rating { display: flex; align-items: center; gap: .4rem; margin-bottom: .55rem; min-height: 1.1rem; }
+.card__rating-num { font-size: .8rem; font-weight: 700; }
+.card__rating-count { font-size: .78rem; color: var(--stone); }
+.card__rating-none { font-size: .76rem; color: var(--stone); }
+
+/* ---------- Gợi ý mua kèm (add-ons) ---------- */
+.addon-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.addon { display: flex; gap: 1rem; align-items: center; background: var(--cloud); border: 1px solid var(--line); padding: .9rem; }
+.addon__media { width: 84px; aspect-ratio: 4/5; flex-shrink: 0; }
+.addon__media::after { inset: 5px; --s: 9px; }
+.addon__name { font-family: var(--font-display); font-weight: 400; font-size: 1rem; line-height: 1.2; margin-bottom: .3rem; }
+.addon__name a:hover { color: var(--brass-deep); }
+.addon__body .price { font-size: .95rem; display: block; margin-bottom: .5rem; }
+
+/* ---------- Newsletter + mạng xã hội (footer) ---------- */
+.newsletter { margin-top: 1.4rem; }
+.newsletter label { display: block; font-size: .82rem; color: #c4bdae; margin-bottom: .5rem; }
+.newsletter__row { display: flex; gap: .5rem; max-width: 360px; }
+.newsletter__row input { flex: 1; min-width: 0; padding: .6rem .8rem; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.05); color: var(--paper); border-radius: var(--radius); font-size: .88rem; }
+.newsletter__row input::placeholder { color: #8f887a; }
+.newsletter__row input:focus { outline: none; border-color: var(--brass); }
+.socials { display: flex; gap: .6rem; margin-top: 1.3rem; }
+.social { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.18); color: #c4bdae; border-radius: 999px; transition: color .2s var(--ease), border-color .2s var(--ease); }
+.social:hover { color: var(--brass); border-color: var(--brass); }
+
+/* ---------- Thanh mua dính đáy (mobile) ---------- */
+.buybar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 150;
+  display: none; align-items: center; gap: 1rem;
+  background: var(--paper); border-top: 1px solid var(--line-strong);
+  padding: .7rem clamp(1.1rem, 4vw, 1.5rem);
+  box-shadow: 0 -10px 30px -20px rgba(21,20,15,.5);
+  transform: translateY(100%); transition: transform .3s var(--ease);
+}
+.buybar.is-visible { transform: translateY(0); }
+.buybar__info { display: flex; flex-direction: column; min-width: 0; margin-right: auto; }
+.buybar__name { font-size: .82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 48vw; }
+.buybar__price { font-family: var(--font-display); color: var(--brass-deep); font-size: 1.1rem; }
+.buybar__form .btn { white-space: nowrap; }
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {

@@ -14,9 +14,18 @@
 <section class="section section--tight">
   <div class="container">
     <form class="toolbar" method="get">
-      <p class="toolbar__count"><strong><%= products.length %></strong> sản phẩm<% if (q) { %> cho “<%= q %>”<% } %></p>
+      <p class="toolbar__count"><strong><%= products.length %></strong> sản phẩm<% if (q) { %> cho “<%= q %>”<% } %><% if (brand) { %> hợp xe <b><%= brandName(brand) %></b><% } %></p>
       <% if (q) { %><input type="hidden" name="q" value="<%= q %>" /><% } %>
       <div class="toolbar__filters">
+        <label class="select">
+          <span>Dòng xe</span>
+          <select name="brand">
+            <option value="">Tất cả xe</option>
+            <% carBrands.forEach(function(b){ %>
+              <option value="<%= b.slug %>" <%= brand===b.slug?'selected':'' %>><%= b.name %></option>
+            <% }) %>
+          </select>
+        </label>
         <div class="price-filter">
           <span>Giá (₫)</span>
           <input type="number" name="min" min="0" step="50000" placeholder="Từ" value="<%= min %>" aria-label="Giá từ" />
@@ -32,8 +41,12 @@
             <option value="ten-az" <%= sort==='ten-az'?'selected':'' %>>Tên: A → Z</option>
           </select>
         </label>
+        <label class="check">
+          <input type="checkbox" name="instock" value="1" <%= instock?'checked':'' %> />
+          <span>Chỉ còn hàng</span>
+        </label>
         <button type="submit" class="btn btn--line btn--sm">Áp dụng</button>
-        <% if (q || min || max || sort !== 'moi-nhat') { %>
+        <% if (q || min || max || brand || instock || sort !== 'moi-nhat') { %>
           <a href="<%= category ? '/danh-muc/' + category.slug : '/cua-hang' %>" class="filter-reset">Xoá lọc</a>
         <% } %>
       </div>

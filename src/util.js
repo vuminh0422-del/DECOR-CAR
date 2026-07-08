@@ -56,4 +56,32 @@ function starString(rating) {
   return '★★★★★☆☆☆☆☆'.slice(5 - full, 10 - full);
 }
 
-module.exports = { slugify, formatVND, ORDER_STATUS, computeDiscount, couponLabel, starString };
+// Danh sách hãng xe phổ biến tại VN — dùng cho bộ chọn "Tìm đồ theo dòng xe".
+// Đây là taxonomy tĩnh (không đổi thường xuyên) nên đặt ở util thay vì DB.
+const CAR_BRANDS = [
+  { slug: 'toyota', name: 'Toyota' },
+  { slug: 'honda', name: 'Honda' },
+  { slug: 'mazda', name: 'Mazda' },
+  { slug: 'hyundai', name: 'Hyundai' },
+  { slug: 'kia', name: 'Kia' },
+  { slug: 'ford', name: 'Ford' },
+  { slug: 'mercedes', name: 'Mercedes-Benz' },
+  { slug: 'vinfast', name: 'VinFast' },
+  { slug: 'mitsubishi', name: 'Mitsubishi' },
+];
+
+function brandName(slug) {
+  const b = CAR_BRANDS.find((x) => x.slug === slug);
+  return b ? b.name : '';
+}
+
+module.exports = {
+  slugify,
+  formatVND,
+  ORDER_STATUS,
+  computeDiscount,
+  couponLabel,
+  starString,
+  CAR_BRANDS,
+  brandName,
+};

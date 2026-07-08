@@ -26,6 +26,29 @@
   </div>
 </section>
 
+<section class="finder">
+  <div class="container finder__inner">
+    <div class="finder__copy">
+      <p class="eyebrow">Tìm đồ vừa xe bạn</p>
+      <h2 class="finder__title">Chọn dòng xe, xem đồ hợp ngay</h2>
+      <p class="finder__lead">Thảm lót, bọc ghế và ốp nội thất được làm theo từng dòng xe — chọn hãng để lọc nhanh sản phẩm phù hợp.</p>
+    </div>
+    <form class="finder__form" action="/cua-hang" method="get">
+      <label class="select select--block">
+        <span>Hãng xe</span>
+        <select name="brand" aria-label="Chọn hãng xe">
+          <% carBrands.forEach(function(b){ %>
+            <option value="<%= b.slug %>"><%= b.name %></option>
+          <% }) %>
+        </select>
+      </label>
+      <button type="submit" class="btn btn--primary">Xem sản phẩm hợp xe</button>
+    </form>
+  </div>
+</section>
+
+<%- include('../partials/trust-strip') %>
+
 <section class="section">
   <div class="container">
     <div class="section__head">
