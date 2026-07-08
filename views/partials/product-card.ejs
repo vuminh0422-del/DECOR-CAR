@@ -5,9 +5,9 @@
 %>
 <article class="card">
   <a class="card__media frame" href="/san-pham/<%= product.slug %>">
-    <img class="card__img card__img--front" src="<%= product.images[0] %>" alt="<%= product.name %>" loading="lazy" width="800" height="1000" />
+    <img class="card__img card__img--front" src="<%= product.images[0] %>" alt="<%= product.name %>" loading="lazy" decoding="async" width="800" height="1000" />
     <% if (_hasSecond) { %>
-      <img class="card__img card__img--back" src="<%= product.images[1] %>" alt="" aria-hidden="true" loading="lazy" width="800" height="1000" />
+      <img class="card__img card__img--back" data-src="<%= product.images[1] %>" alt="" aria-hidden="true" decoding="async" width="800" height="1000" />
     <% } %>
     <% if (product.compareAt && product.compareAt > product.price) { %>
       <span class="card__tag">Ưu đãi</span>

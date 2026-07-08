@@ -7,6 +7,7 @@ const express = require('express');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
 const methodOverride = require('method-override');
+const compression = require('compression');
 
 const cartMiddleware = require('./src/middleware/cart');
 const { currentUser } = require('./src/middleware/auth');
@@ -28,10 +29,21 @@ app.use(expressLayouts);
 app.set('layout', 'layout');
 
 // ----- Core middleware -----
+app.use(compression()); // nén gzip/br cho HTML/CSS/JS -> giảm ~70% dung lượng truyền
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname, 'public')));
+// Phục vụ file tĩnh kèm cache trình duyệt: CSS/JS 7 ngày, ảnh 30 ngày.
+app.use(
+  express.static(path.join(__dirname, 'public'), {
+    maxAge: '7d',
+    setHeaders: (res, filePath) => {
+      if (/[\\/]img[\\/]/.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=2592000'); // ảnh: 30 ngày
+      }
+    },
+  })
+);
 
 app.use(
   session({
@@ -71,6 +83,7 @@ app.use((req, res, next) => {
   res.locals.metaDescription =
     'DECOR CAR — nội thất, đồ trang trí và phụ kiện xe hơi cao cấp. Bọc ghế da, ốp nội thất, thảm lót sàn, đèn ambient, camera và phụ kiện, tuyển chọn theo chất liệu thật.';
   res.locals.ogImage = '/img/products/leather-3.jpg';
+  res.locals.gaId = process.env.GA_MEASUREMENT_ID || ''; // Google Analytics 4 (để trống = tắt)
   res.locals.categories = db.categories(); // dùng ở header/footer mọi trang
   res.locals.carBrands = CAR_BRANDS; // bộ chọn "Tìm đồ theo dòng xe"
   res.locals.brandName = brandName;

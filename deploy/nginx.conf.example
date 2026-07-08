@@ -6,6 +6,11 @@ server {
     listen 80;
     server_name decorcar.vn www.decorcar.vn;
 
+    # Nén phản hồi (app Node cũng đã tự nén; bật ở Nginx để chắc chắn).
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml application/xml;
+    gzip_min_length 1024;
+
     # Chuyển toàn bộ HTTP sang HTTPS sau khi cài SSL (Certbot).
     # return 301 https://$host$request_uri;
 

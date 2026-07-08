@@ -66,6 +66,18 @@
     });
   });
 
+  // ----- Ảnh hover của card: chỉ tải khi trỏ vào (không tốn dung lượng trên mobile) -----
+  document.querySelectorAll('.card').forEach(function (card) {
+    const back = card.querySelector('.card__img--back[data-src]');
+    if (!back) return;
+    const load = function () {
+      back.src = back.dataset.src;
+      back.removeAttribute('data-src');
+      card.removeEventListener('mouseenter', load);
+    };
+    card.addEventListener('mouseenter', load);
+  });
+
   // ----- Thanh mua dính đáy (mobile): hiện khi nút mua chính cuộn khỏi màn hình -----
   const buybar = document.querySelector('[data-buybar]');
   const buyForm = document.querySelector('.buy');
