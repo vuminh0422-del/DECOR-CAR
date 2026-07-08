@@ -1,0 +1,12 @@
+Ảnh minh hoạ sản phẩm — nguồn Unsplash (giấy phép miễn phí, dùng được cho mục đích thương mại,
+không bắt buộc ghi công): https://unsplash.com/license
+
+Đây là ảnh stock tạm thời để website trông hoàn chỉnh. Khi có ảnh sản phẩm thật của cửa hàng,
+thay thế bằng cách:
+  1. Đặt ảnh mới vào thư mục này (public/img/products/) với cùng tên file, HOẶC
+  2. Sửa map "realImages" trong src/db/seed.js rồi chạy: npm run seed
+
+Ảnh được tải theo từng nhóm: leather (bọc ghế/da), wood (ốp gỗ), carbon (ốp carbon),
+steering (vô lăng), cushion (gối/tựa), floormat (thảm sàn), trunk (thảm cốp),
+dashboard (taplo), ambient (đèn nội thất), dashcam (camera), charger (tẩu sạc),
+screen (màn hình), freshener (nước hoa), cleaning (vệ sinh nội thất).

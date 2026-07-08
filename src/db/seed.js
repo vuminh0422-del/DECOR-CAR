@@ -113,12 +113,39 @@ const universalSlugs = new Set([
   'boc-can-so-bao-tay-phanh',
 ]);
 
+// Ảnh thật (stock miễn phí bản quyền — Unsplash) đặt tại public/img/products/.
+// Mỗi slug → danh sách file ảnh theo thứ tự hiển thị (ảnh đầu là ảnh chính).
+const IMG = (n) => `/img/products/${n}.jpg`;
+const realImages = {
+  'boc-ghe-da-nappa-premium': ['leather-1', 'leather-2', 'cushion-1'],
+  'op-noi-that-van-go-veneer': ['wood-1', 'wood-2', 'carbon-1'],
+  'op-noi-that-van-carbon': ['carbon-1', 'carbon-2', 'dashboard-2'],
+  'boc-vo-lang-da-khau-tay': ['steering-1', 'steering-2'],
+  'tua-dau-da-memory-foam': ['cushion-1', 'cushion-3'],
+  'boc-can-so-bao-tay-phanh': ['carbon-2', 'steering-2'],
+  'tham-lot-san-6d-carbon': ['floormat-1', 'floormat-3'],
+  'tham-lot-san-da-pu-cao-cap': ['floormat-2', 'floormat-1'],
+  'tham-lot-cop-dinh-hinh': ['trunk-1', 'trunk-2'],
+  'tham-taplo-chong-nang': ['dashboard-1', 'dashboard-2'],
+  'den-led-ambient-noi-that-64-mau': ['ambient-1', 'ambient-3', 'ambient-2'],
+  'den-cua-chieu-logo': ['ambient-2', 'ambient-1'],
+  'camera-hanh-trinh-2k-wifi': ['dashcam-1', 'dashcam-2'],
+  'tau-sac-nhanh-3-cong': ['charger-1', 'charger-2'],
+  'man-hinh-android-box-9-inch': ['screen-1', 'screen-2'],
+  'nuoc-hoa-o-to-huong-go-tram': ['freshener-1', 'freshener-2'],
+  'goi-tua-lung-da-cao-cap': ['cushion-2', 'cushion-1'],
+  'bo-dung-dich-ve-sinh-noi-that': ['cleaning-1', 'cleaning-2'],
+};
+
 const products = rawProducts.map((row, i) => {
   const [name, catSlug, price, compareAt, tone, featured, description] = row;
   const slug = slugify(name);
   const fittedBrands = fitBySlug[slug] || null;
   const universalFit = !fittedBrands && (universalSlugs.has(slug)
     || catSlug === 'den-phu-kien' || catSlug === 'cham-soc-trang-tri');
+  const imgs = realImages[slug]
+    ? realImages[slug].map(IMG)
+    : [`/img/ph/${encodeURIComponent(name)}?tone=${tone}&v=1`];
   return {
     id: i + 1,
     slug,
@@ -131,11 +158,7 @@ const products = rawProducts.map((row, i) => {
     description,
     brands: fittedBrands || [],
     universalFit,
-    images: [
-      `/img/ph/${encodeURIComponent(name)}?tone=${tone}&v=1`,
-      `/img/ph/${encodeURIComponent(name + ' · chi tiết')}?tone=${tone}&v=2`,
-      `/img/ph/${encodeURIComponent(name + ' · góc khác')}?tone=${tone}&v=3`,
-    ],
+    images: imgs,
     stock: 30,
     sku: 'DC-' + String(1000 + i + 1),
     createdAt: new Date('2026-01-15T00:00:00Z').toISOString(),
@@ -157,6 +180,7 @@ const blogPosts = [
     title: '5 món nâng cấp nội thất xe đáng tiền nhất',
     excerpt: 'Không cần chi quá nhiều, 5 hạng mục dưới đây thay đổi hoàn toàn cảm giác ngồi trong xe của bạn.',
     cover: 'ink',
+    coverImg: '/img/products/leather-3.jpg',
     author: 'Đội ngũ DECOR CAR',
     date: '2026-05-20',
     tag: 'Hướng dẫn',
@@ -173,6 +197,7 @@ const blogPosts = [
     title: 'Bọc ghế da xe hơi: chọn loại da nào?',
     excerpt: 'Da Nappa, da PU hay da công nghiệp? Phân biệt nhanh để không trả tiền oan.',
     cover: 'walnut',
+    coverImg: '/img/products/leather-1.jpg',
     author: 'Đội ngũ DECOR CAR',
     date: '2026-05-08',
     tag: 'Kinh nghiệm',
@@ -189,6 +214,7 @@ const blogPosts = [
     title: 'Đèn ambient nội thất: tinh tế hay loè loẹt?',
     excerpt: 'Bí quyết dùng đèn ambient sao cho sang, không biến khoang xe thành sàn disco.',
     cover: 'brass',
+    coverImg: '/img/products/ambient-1.jpg',
     author: 'Đội ngũ DECOR CAR',
     date: '2026-04-22',
     tag: 'Mẹo nhỏ',
@@ -204,6 +230,7 @@ const blogPosts = [
     title: 'Thảm lót sàn 6D có thực sự cần thiết?',
     excerpt: 'Câu trả lời ngắn: có. Và đây là lý do cùng cách chọn thảm vừa khít.',
     cover: 'ink',
+    coverImg: '/img/products/floormat-1.jpg',
     author: 'Đội ngũ DECOR CAR',
     date: '2026-04-05',
     tag: 'Hướng dẫn',

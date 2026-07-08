@@ -16,7 +16,7 @@
         <% posts.forEach(function(post){ %>
           <article class="blog-card">
             <a class="blog-card__media frame" href="/blog/<%= post.slug %>">
-              <img src="/img/ph/<%= encodeURIComponent(post.title) %>?tone=<%= post.cover %>" alt="<%= post.title %>" loading="lazy" width="800" height="500" />
+              <img src="<%= post.coverImg ? post.coverImg : '/img/ph/' + encodeURIComponent(post.title) + '?tone=' + post.cover %>" alt="<%= post.title %>" loading="lazy" width="800" height="500" />
               <span class="blog-card__tag"><%= post.tag %></span>
             </a>
             <div class="blog-card__body">
