@@ -2,8 +2,12 @@
   var _r = (typeof ratingFor === 'function') ? ratingFor(product.id) : { average: 0, count: 0 };
   var _stock = product.stock || 0;
   var _hasSecond = product.images && product.images.length > 1;
+  var _hasOptions = product.options && product.options.length;
 %>
 <article class="card">
+  <button type="button" class="card__wish" data-wish="<%= product.id %>" aria-label="Lưu vào yêu thích" aria-pressed="false">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.35-9.5-8.5C1 8 2.5 5 5.5 5c2 0 3.2 1.2 4 2.3C10.3 6.2 11.5 5 13.5 5c3 0 4.5 3 3 6.5C19 15.65 12 20 12 20z"/></svg>
+  </button>
   <a class="card__media frame" href="/san-pham/<%= product.slug %>">
     <img class="card__img card__img--front" src="<%= product.images[0] %>" alt="<%= product.name %>" loading="lazy" decoding="async" width="800" height="1000" />
     <% if (_hasSecond) { %>
@@ -36,11 +40,15 @@
         <span class="price price--old"><%= formatVND(product.compareAt) %></span>
       <% } %>
     </div>
-    <form action="/gio-hang/them" method="post" class="card__add">
-      <input type="hidden" name="productId" value="<%= product.id %>" />
-      <button type="submit" class="btn btn--ghost btn--block" <%= _stock === 0 ? 'disabled' : '' %>>
-        <%= _stock === 0 ? 'Liên hệ đặt hàng' : 'Thêm vào giỏ' %>
-      </button>
-    </form>
+    <% if (_stock === 0) { %>
+      <a href="/san-pham/<%= product.slug %>" class="btn btn--ghost btn--block">Liên hệ đặt hàng</a>
+    <% } else if (_hasOptions) { %>
+      <a href="/san-pham/<%= product.slug %>" class="btn btn--ghost btn--block">Chọn tuỳ chọn →</a>
+    <% } else { %>
+      <form action="/gio-hang/them" method="post" class="card__add">
+        <input type="hidden" name="productId" value="<%= product.id %>" />
+        <button type="submit" class="btn btn--ghost btn--block">Thêm vào giỏ</button>
+      </form>
+    <% } %>
   </div>
 </article>

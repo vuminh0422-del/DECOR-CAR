@@ -162,6 +162,22 @@ router.post('/san-pham/:slug/danh-gia', (req, res) => {
   res.redirect('/san-pham/' + product.slug + '?danhgia=ok#danh-gia');
 });
 
+// Trang yêu thích (danh sách lấy từ localStorage phía client)
+router.get('/yeu-thich', (req, res) => {
+  res.render('pages/wishlist', { title: 'Sản phẩm yêu thích — DECOR CAR' });
+});
+
+// API: trả HTML các thẻ sản phẩm theo danh sách id (dùng cho wishlist & "đã xem")
+router.get('/api/the-san-pham', (req, res) => {
+  const ids = String(req.query.ids || '')
+    .split(',')
+    .map(Number)
+    .filter(Boolean)
+    .slice(0, 24);
+  const products = ids.map((id) => db.productById(id)).filter(Boolean);
+  res.render('partials/card-list', { products, layout: false });
+});
+
 // Trang chính sách (data-driven)
 router.get('/chinh-sach/:slug', (req, res) => {
   const policy = policyBySlug(req.params.slug);

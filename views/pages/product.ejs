@@ -25,7 +25,7 @@
       <% } %>
     </div>
 
-    <div class="product-info">
+    <div class="product-info" data-viewed-product="<%= product.id %>">
       <% if (category) { %><p class="eyebrow"><%= category.name %></p><% } %>
       <h1 class="product-info__title"><%= product.name %></h1>
 
@@ -61,18 +61,44 @@
         </li>
       </ul>
 
-      <form action="/gio-hang/them" method="post" class="buy">
+      <form action="/gio-hang/them" method="post" class="buy-form">
         <input type="hidden" name="productId" value="<%= product.id %>" />
-        <div class="qty" data-qty>
-          <button type="button" class="qty__btn" data-step="-1" aria-label="Giảm">−</button>
-          <input type="number" name="quantity" value="1" min="1" max="<%= Math.max(1, product.stock) %>" aria-label="Số lượng" />
-          <button type="button" class="qty__btn" data-step="1" aria-label="Tăng">+</button>
-        </div>
-        <div class="buy__actions">
-          <button type="submit" class="btn btn--line">Thêm vào giỏ</button>
-          <button type="submit" name="buyNow" value="1" class="btn btn--primary">Mua ngay</button>
+
+        <% if (product.options && product.options.length) { %>
+          <div class="product-options">
+            <% product.options.forEach(function(o){ %>
+              <div class="opt-group">
+                <span class="opt-group__label"><%= o.name %></span>
+                <div class="opt-pills">
+                  <% o.values.forEach(function(v, i){ %>
+                    <label class="opt-pill">
+                      <input type="radio" name="opt[<%= o.name %>]" value="<%= v %>" <%= i===0?'checked':'' %> />
+                      <span><%= v %></span>
+                    </label>
+                  <% }) %>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <div class="buy">
+          <div class="qty" data-qty>
+            <button type="button" class="qty__btn" data-step="-1" aria-label="Giảm">−</button>
+            <input type="number" name="quantity" value="1" min="1" max="<%= Math.max(1, product.stock) %>" aria-label="Số lượng" />
+            <button type="button" class="qty__btn" data-step="1" aria-label="Tăng">+</button>
+          </div>
+          <div class="buy__actions">
+            <button type="submit" class="btn btn--line">Thêm vào giỏ</button>
+            <button type="submit" name="buyNow" value="1" class="btn btn--primary">Mua ngay</button>
+          </div>
         </div>
       </form>
+
+      <button type="button" class="wish-btn" data-wish="<%= product.id %>" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.35-9.5-8.5C1 8 2.5 5 5.5 5c2 0 3.2 1.2 4 2.3C10.3 6.2 11.5 5 13.5 5c3 0 4.5 3 3 6.5C19 15.65 12 20 12 20z"/></svg>
+        <span class="wish-btn__label">Lưu vào yêu thích</span>
+      </button>
 
       <div class="assurance">
         <span>✓ Giao &amp; lắp đặt tận nơi</span>
@@ -184,6 +210,13 @@
   </div>
 </section>
 <% } %>
+
+<section class="section section--tight" data-recent-section data-recent-exclude="<%= product.id %>" hidden>
+  <div class="container">
+    <div class="section__head"><p class="eyebrow">Bạn vừa xem</p><h2 class="section__title section__title--sm">Sản phẩm đã xem</h2></div>
+    <div class="product-grid" data-recent-root></div>
+  </div>
+</section>
 
 <!-- Thanh mua nhanh dính đáy màn hình (chỉ hiện trên mobile) -->
 <div class="buybar" data-buybar>

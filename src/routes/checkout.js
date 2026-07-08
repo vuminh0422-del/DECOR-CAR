@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
+const { sendOrderConfirmation } = require('../mailer');
 
 const SHIP_FEE = 50000;
 const FREE_SHIP_THRESHOLD = 3000000;
@@ -77,6 +78,8 @@ router.post('/', (req, res) => {
       price: it.product.price,
       quantity: it.quantity,
       lineTotal: it.lineTotal,
+      variant: it.variant || null,
+      variantLabel: it.variantLabel || '',
     })),
     subtotal: totals.subtotal,
     discount: totals.discount,
@@ -85,6 +88,11 @@ router.post('/', (req, res) => {
     total: totals.total,
     createdAt: new Date().toISOString(),
   });
+
+  // Gửi email xác nhận (không chặn luồng — bỏ qua nếu chưa cấu hình SMTP)
+  sendOrderConfirmation(order, res.locals.store).catch((err) =>
+    console.error('[mailer] Gửi email thất bại:', err.message)
+  );
 
   // ----- ĐIỂM TÍCH HỢP CỔNG THANH TOÁN -----
   // Khi cần VNPay/Momo: với form.payment === 'online', tạo URL thanh toán tại đây

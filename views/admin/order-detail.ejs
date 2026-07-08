@@ -13,7 +13,7 @@
       <tbody>
         <% order.items.forEach(function(it){ %>
           <tr>
-            <td><a href="/san-pham/<%= it.slug %>" target="_blank" rel="noopener"><%= it.name %></a></td>
+            <td><a href="/san-pham/<%= it.slug %>" target="_blank" rel="noopener"><%= it.name %></a><% if (it.variantLabel) { %><br><small style="color:#8c8472"><%= it.variantLabel %></small><% } %></td>
             <td><%= formatVND(it.price) %></td>
             <td><%= it.quantity %></td>
             <td><%= formatVND(it.lineTotal) %></td>

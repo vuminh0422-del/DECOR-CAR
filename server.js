@@ -3,6 +3,7 @@
 require('dotenv').config();
 
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
@@ -21,6 +22,17 @@ const db = require('./src/db/database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Phiên bản tài nguyên tĩnh (theo mtime file) để "cache-busting":
+// cache dài hạn nhưng khi CSS/JS đổi thì ?v= đổi -> trình duyệt tải bản mới ngay.
+function assetMtime(rel) {
+  try {
+    return String(Math.floor(fs.statSync(path.join(__dirname, 'public', rel)).mtimeMs));
+  } catch (e) {
+    return '1';
+  }
+}
+const ASSET_VER = { css: assetMtime('css/styles.css'), js: assetMtime('js/main.js') };
 
 // ----- View engine -----
 app.set('view engine', 'ejs');
@@ -84,6 +96,8 @@ app.use((req, res, next) => {
     'DECOR CAR — nội thất, đồ trang trí và phụ kiện xe hơi cao cấp. Bọc ghế da, ốp nội thất, thảm lót sàn, đèn ambient, camera và phụ kiện, tuyển chọn theo chất liệu thật.';
   res.locals.ogImage = '/img/products/leather-3.jpg';
   res.locals.gaId = process.env.GA_MEASUREMENT_ID || ''; // Google Analytics 4 (để trống = tắt)
+  res.locals.fbPixelId = process.env.FB_PIXEL_ID || ''; // Meta (Facebook) Pixel (để trống = tắt)
+  res.locals.assetVer = ASSET_VER; // cache-busting cho CSS/JS
   res.locals.categories = db.categories(); // dùng ở header/footer mọi trang
   res.locals.carBrands = CAR_BRANDS; // bộ chọn "Tìm đồ theo dòng xe"
   res.locals.brandName = brandName;

@@ -67,7 +67,7 @@
           <% cart.items.forEach(function(it){ %>
             <li>
               <span class="mini-cart__qty"><%= it.quantity %>×</span>
-              <span class="mini-cart__name"><%= it.product.name %></span>
+              <span class="mini-cart__name"><%= it.product.name %><% if (it.variantLabel) { %><br><small style="color:var(--stone)"><%= it.variantLabel %></small><% } %></span>
               <span class="mini-cart__price"><%= formatVND(it.lineTotal) %></span>
             </li>
           <% }) %>

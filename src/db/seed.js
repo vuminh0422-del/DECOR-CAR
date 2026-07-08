@@ -137,6 +137,19 @@ const realImages = {
   'bo-dung-dich-ve-sinh-noi-that': ['cleaning-1', 'cleaning-2'],
 };
 
+// Biến thể (tuỳ chọn) cho sản phẩm phù hợp — màu chỉ, kiểu may, tông gỗ… (không đổi giá).
+const optionsBySlug = {
+  'boc-ghe-da-nappa-premium': [
+    { name: 'Màu chỉ', values: ['Đen', 'Nâu', 'Đỏ'] },
+    { name: 'Kiểu may', values: ['Trơn', 'Kim cương'] },
+  ],
+  'boc-vo-lang-da-khau-tay': [{ name: 'Màu chỉ', values: ['Đen', 'Nâu', 'Đỏ', 'Trắng'] }],
+  'op-noi-that-van-go-veneer': [{ name: 'Tông gỗ', values: ['Óc chó', 'Sồi sáng'] }],
+  'tham-lot-san-6d-carbon': [{ name: 'Màu viền', values: ['Đen', 'Nâu kem', 'Đỏ'] }],
+  'tham-lot-san-da-pu-cao-cap': [{ name: 'Màu chỉ', values: ['Be', 'Nâu', 'Đen'] }],
+  'goi-tua-lung-da-cao-cap': [{ name: 'Màu', values: ['Đen', 'Kem', 'Nâu'] }],
+};
+
 const products = rawProducts.map((row, i) => {
   const [name, catSlug, price, compareAt, tone, featured, description] = row;
   const slug = slugify(name);
@@ -158,6 +171,7 @@ const products = rawProducts.map((row, i) => {
     description,
     brands: fittedBrands || [],
     universalFit,
+    options: optionsBySlug[slug] || [],
     images: imgs,
     stock: 30,
     sku: 'DC-' + String(1000 + i + 1),

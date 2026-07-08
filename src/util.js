@@ -116,6 +116,28 @@ function blogCategoryName(slug) {
   return c ? c.name : '';
 }
 
+// ----- Biến thể sản phẩm (màu chỉ, kích thước…) -----
+// variant = { 'Màu chỉ': 'Đen', 'Kiểu may': 'Trơn' } hoặc null.
+// Khoá dòng giỏ hàng: gộp productId + biến thể để mỗi tổ hợp là một dòng riêng.
+function variantKey(variant) {
+  if (!variant) return '';
+  const keys = Object.keys(variant).filter((k) => variant[k]);
+  if (keys.length === 0) return '';
+  return keys.sort().map((k) => k + '=' + variant[k]).join(';');
+}
+function lineKey(productId, variant) {
+  const vk = variantKey(variant);
+  return vk ? productId + '::' + vk : String(productId);
+}
+// Nhãn hiển thị: "Màu chỉ: Đen · Kiểu may: Trơn"
+function variantLabel(variant) {
+  if (!variant) return '';
+  return Object.keys(variant)
+    .filter((k) => variant[k])
+    .map((k) => k + ': ' + variant[k])
+    .join(' · ');
+}
+
 module.exports = {
   slugify,
   formatVND,
@@ -129,4 +151,7 @@ module.exports = {
   blogCategoryBySlug,
   blogCategoryForProduct,
   blogCategoryName,
+  variantKey,
+  lineKey,
+  variantLabel,
 };

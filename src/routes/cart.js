@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
+const { lineKey: makeLineKey } = require('../util');
 
 // Quay lại trang trước (thay cho res.redirect('back') đã deprecated ở Express 5).
 function back(req, res) {
@@ -23,8 +24,24 @@ router.post('/them', (req, res) => {
     req.session.flash = { type: 'error', message: 'Sản phẩm không tồn tại.' };
     return back(req, res);
   }
+
+  // Dựng biến thể từ các tuỳ chọn của sản phẩm (opt[Tên tuỳ chọn] = giá trị)
+  let variant = null;
+  if (Array.isArray(product.options) && product.options.length) {
+    const picked = req.body.opt || {};
+    variant = {};
+    product.options.forEach((o) => {
+      const chosen = picked[o.name];
+      variant[o.name] = o.values.includes(chosen) ? chosen : o.values[0];
+    });
+  }
+
+  const key = makeLineKey(id, variant);
   const cart = req.session.cart || (req.session.cart = {});
-  cart[id] = (Number(cart[id]) || 0) + qty;
+  const existing = cart[key];
+  const prevQty = existing && typeof existing === 'object' ? Number(existing.quantity) || 0 : Number(existing) || 0;
+  cart[key] = { productId: id, quantity: prevQty + qty, variant };
+
   req.session.flash = { type: 'success', message: `Đã thêm “${product.name}” vào giỏ.` };
 
   // Nếu bấm "Mua ngay" thì sang thẳng giỏ hàng
@@ -35,12 +52,15 @@ router.post('/them', (req, res) => {
 // Cập nhật số lượng
 router.post('/cap-nhat', (req, res) => {
   const cart = req.session.cart || {};
-  const id = Number(req.body.productId);
+  const key = req.body.lineKey;
   const qty = Number(req.body.quantity);
+  if (!cart[key]) return res.redirect('/gio-hang');
   if (qty <= 0) {
-    delete cart[id];
+    delete cart[key];
+  } else if (typeof cart[key] === 'object') {
+    cart[key].quantity = qty;
   } else {
-    cart[id] = qty;
+    cart[key] = qty;
   }
   res.redirect('/gio-hang');
 });
@@ -48,7 +68,7 @@ router.post('/cap-nhat', (req, res) => {
 // Xoá khỏi giỏ
 router.post('/xoa', (req, res) => {
   const cart = req.session.cart || {};
-  delete cart[Number(req.body.productId)];
+  delete cart[req.body.lineKey];
   res.redirect('/gio-hang');
 });
 

@@ -27,13 +27,14 @@
                 </a>
                 <div>
                   <a class="cart-prod__name" href="/san-pham/<%= it.product.slug %>"><%= it.product.name %></a>
+                  <% if (it.variantLabel) { %><p class="cart-prod__variant"><%= it.variantLabel %></p><% } %>
                   <p class="cart-prod__sku"><%= it.product.sku %></p>
                 </div>
               </div>
               <div class="cart-cell" data-label="Đơn giá"><%= formatVND(it.product.price) %></div>
               <div class="cart-cell" data-label="Số lượng">
                 <form action="/gio-hang/cap-nhat" method="post" class="qty qty--sm" data-qty data-autosubmit>
-                  <input type="hidden" name="productId" value="<%= it.product.id %>" />
+                  <input type="hidden" name="lineKey" value="<%= it.lineKey %>" />
                   <button type="button" class="qty__btn" data-step="-1" aria-label="Giảm">−</button>
                   <input type="number" name="quantity" value="<%= it.quantity %>" min="0" aria-label="Số lượng" />
                   <button type="button" class="qty__btn" data-step="1" aria-label="Tăng">+</button>
@@ -42,7 +43,7 @@
               <div class="cart-cell cart-cell--total" data-label="Thành tiền"><%= formatVND(it.lineTotal) %></div>
               <div class="cart-cell cart-cell--remove">
                 <form action="/gio-hang/xoa" method="post">
-                  <input type="hidden" name="productId" value="<%= it.product.id %>" />
+                  <input type="hidden" name="lineKey" value="<%= it.lineKey %>" />
                   <button type="submit" class="link-remove" aria-label="Xoá">Xoá</button>
                 </form>
               </div>

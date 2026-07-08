@@ -15,7 +15,7 @@
         </div>
         <ul class="receipt__items">
           <% order.items.forEach(function(it){ %>
-            <li><span><%= it.quantity %>× <%= it.name %></span><b><%= formatVND(it.lineTotal) %></b></li>
+            <li><span><%= it.quantity %>× <%= it.name %><% if (it.variantLabel) { %> <em class="receipt__variant">(<%= it.variantLabel %>)</em><% } %></span><b><%= formatVND(it.lineTotal) %></b></li>
           <% }) %>
         </ul>
         <div class="summary-row"><span>Tạm tính</span><b><%= formatVND(order.subtotal) %></b></div>
@@ -40,3 +40,13 @@
     </div>
   </div>
 </section>
+
+<% if (fbPixelId || gaId) { %>
+<script>
+  (function(){
+    var value = <%= order.total %>, currency = 'VND';
+    <% if (fbPixelId) { %>if (window.fbq) fbq('track', 'Purchase', { value: value, currency: currency });<% } %>
+    <% if (gaId) { %>if (window.gtag) gtag('event', 'purchase', { transaction_id: '<%= order.code %>', value: value, currency: currency });<% } %>
+  })();
+</script>
+<% } %>
