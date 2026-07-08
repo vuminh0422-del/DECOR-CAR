@@ -16,7 +16,7 @@
     <div class="post__body">
       <p class="post__lead"><%= post.excerpt %></p>
       <% post.body.forEach(function(para){ %>
-        <p><%= para %></p>
+        <p><%- para %></p>
       <% }) %>
 
       <div class="post__cta">
@@ -27,6 +27,19 @@
     </div>
   </div>
 </article>
+
+<% if (typeof mentioned !== 'undefined' && mentioned.length) { %>
+<section class="section section--tight">
+  <div class="container">
+    <div class="section__head"><p class="eyebrow">Nhắc đến trong bài</p><h2 class="section__title section__title--sm">Sản phẩm liên quan</h2></div>
+    <div class="product-grid">
+      <% mentioned.forEach(function(p){ %>
+        <%- include('../partials/product-card', { product: p }) %>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
 
 <% if (related.length) { %>
 <section class="section section--tight">

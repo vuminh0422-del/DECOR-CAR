@@ -74,6 +74,9 @@ function renderCatalog(req, res, category) {
 
   res.render('pages/catalog', {
     title: category ? category.name + ' — DECOR CAR' : 'Cửa hàng — DECOR CAR',
+    metaDescription: category
+      ? (category.description || '').slice(0, 160)
+      : 'Cửa hàng DECOR CAR — nội thất & phụ kiện trang trí xe hơi cao cấp. Lọc theo dòng xe, giá và danh mục.',
     category,
     categories: db.categories(),
     products: list,
@@ -110,6 +113,8 @@ router.get('/san-pham/:slug', (req, res) => {
 
   res.render('pages/product', {
     title: product.name + ' — DECOR CAR',
+    metaDescription: (product.description || '').slice(0, 160),
+    ogImage: product.images && product.images[0],
     product,
     category,
     related,
@@ -168,6 +173,7 @@ router.get('/chinh-sach/:slug', (req, res) => {
   }
   res.render('pages/policy', {
     title: policy.title + ' — DECOR CAR',
+    metaDescription: (policy.intro || '').slice(0, 160),
     policy,
     policies: POLICIES,
   });

@@ -519,6 +519,9 @@ input, textarea, select, button { font-family: inherit; }
 .post__body { max-width: 720px; margin-inline: auto; padding-bottom: clamp(2rem, 5vw, 3.5rem); }
 .post__lead { font-size: 1.25rem; line-height: 1.6; color: var(--ink); font-family: var(--font-display); margin-bottom: 1.5rem; }
 .post__body p { color: var(--ink-soft); margin-bottom: 1.3rem; font-size: 1.04rem; line-height: 1.75; }
+/* Link nội bộ trong nội dung bài viết & chính sách — làm nổi bật để dễ thấy */
+.post__body a, .policy-section p a, .policy-list a { color: var(--brass-deep); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; transition: color .2s var(--ease); }
+.post__body a:hover, .policy-section p a:hover, .policy-list a:hover { color: var(--ink); }
 .post__cta { margin-top: 2.5rem; padding: 1.8rem; background: var(--paper-2); display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
 .post__cta p { font-family: var(--font-display); font-size: 1.2rem; color: var(--ink); margin-right: auto; }
 

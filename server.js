@@ -12,6 +12,7 @@ const cartMiddleware = require('./src/middleware/cart');
 const { currentUser } = require('./src/middleware/auth');
 const { formatVND, ORDER_STATUS, starString, couponLabel, CAR_BRANDS, brandName } = require('./src/util');
 const { renderPlaceholder } = require('./src/placeholder');
+const { POLICIES } = require('./src/content/policies');
 const db = require('./src/db/database');
 
 const app = express();
@@ -59,6 +60,14 @@ app.use((req, res, next) => {
     bankHolder: process.env.BANK_HOLDER || 'CUA HANG DECOR CAR',
   };
   res.locals.currentPath = req.path;
+  // ----- SEO: URL gốc + canonical + mô tả + ảnh OG (mặc định, trang có thể ghi đè) -----
+  const base = (process.env.SITE_URL && process.env.SITE_URL.replace(/\/+$/, '')) ||
+    req.protocol + '://' + req.get('host');
+  res.locals.siteUrl = base;
+  res.locals.canonical = base + req.path; // bỏ query để tránh trùng lặp nội dung
+  res.locals.metaDescription =
+    'DECOR CAR — nội thất, đồ trang trí và phụ kiện xe hơi cao cấp. Bọc ghế da, ốp nội thất, thảm lót sàn, đèn ambient, camera và phụ kiện, tuyển chọn theo chất liệu thật.';
+  res.locals.ogImage = '/img/products/leather-3.jpg';
   res.locals.categories = db.categories(); // dùng ở header/footer mọi trang
   res.locals.carBrands = CAR_BRANDS; // bộ chọn "Tìm đồ theo dòng xe"
   res.locals.brandName = brandName;
@@ -81,6 +90,56 @@ app.get('/img/ph/:label', (req, res) => {
   res.type('image/svg+xml');
   res.set('Cache-Control', 'public, max-age=86400');
   res.send(renderPlaceholder(label, tone));
+});
+
+// ----- SEO: robots.txt -----
+app.get('/robots.txt', (req, res) => {
+  const base = (process.env.SITE_URL && process.env.SITE_URL.replace(/\/+$/, '')) ||
+    req.protocol + '://' + req.get('host');
+  res.type('text/plain').send(
+    [
+      'User-agent: *',
+      'Allow: /',
+      'Disallow: /quan-tri',
+      'Disallow: /tai-khoan',
+      'Disallow: /gio-hang',
+      'Disallow: /thanh-toan',
+      '',
+      'Sitemap: ' + base + '/sitemap.xml',
+      '',
+    ].join('\n')
+  );
+});
+
+// ----- SEO: sitemap.xml (sinh động từ dữ liệu) -----
+app.get('/sitemap.xml', (req, res) => {
+  const base = (process.env.SITE_URL && process.env.SITE_URL.replace(/\/+$/, '')) ||
+    req.protocol + '://' + req.get('host');
+  const esc = (s) => String(s).replace(/&/g, '&amp;');
+  const url = (loc, lastmod, priority) =>
+    '  <url><loc>' + esc(base + loc) + '</loc>' +
+    (lastmod ? '<lastmod>' + String(lastmod).slice(0, 10) + '</lastmod>' : '') +
+    (priority ? '<priority>' + priority + '</priority>' : '') +
+    '</url>';
+
+  const urls = [];
+  urls.push(url('/', null, '1.0'));
+  urls.push(url('/cua-hang', null, '0.9'));
+  urls.push(url('/blog', null, '0.7'));
+  urls.push(url('/gioi-thieu', null, '0.5'));
+  urls.push(url('/lien-he', null, '0.5'));
+  urls.push(url('/cau-hoi-thuong-gap', null, '0.5'));
+  db.categories().forEach((c) => urls.push(url('/danh-muc/' + c.slug, null, '0.8')));
+  db.products().forEach((p) => urls.push(url('/san-pham/' + p.slug, p.createdAt, '0.8')));
+  db.blogPosts().forEach((p) => urls.push(url('/blog/' + p.slug, p.date, '0.6')));
+  POLICIES.forEach((p) => urls.push(url('/chinh-sach/' + p.slug, p.updated, '0.3')));
+
+  res.type('application/xml').send(
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+      urls.join('\n') +
+      '\n</urlset>\n'
+  );
 });
 
 // ----- Mount routes -----

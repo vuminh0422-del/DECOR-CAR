@@ -22,10 +22,17 @@ router.get('/:slug', (req, res) => {
     });
   }
   const related = db.blogPosts().filter((p) => p.slug !== post.slug).slice(0, 3);
+  // Sản phẩm được nhắc trong bài (internal link blog -> product)
+  const mentioned = (post.related || [])
+    .map((slug) => db.productBySlug(slug))
+    .filter(Boolean);
   res.render('pages/blog-post', {
     title: post.title + ' — DECOR CAR',
+    metaDescription: post.excerpt,
+    ogImage: post.coverImg,
     post,
     related,
+    mentioned,
   });
 });
 
