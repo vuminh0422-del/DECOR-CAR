@@ -3,31 +3,36 @@
     <nav class="crumbs"><a href="/">Trang chủ</a><span>/</span><span>Blog</span></nav>
     <p class="eyebrow">Kiến thức &amp; kinh nghiệm</p>
     <h1 class="page-title">Blog DECOR CAR</h1>
-    <p class="page-desc">Mẹo độ xe, kinh nghiệm chọn nội thất và chăm sóc khoang lái — chia sẻ từ đội ngũ DECOR CAR.</p>
+    <p class="page-desc">Mẹo độ xe, kinh nghiệm chọn nội thất và chăm sóc khoang lái — chia theo từng nhóm sản phẩm để bạn dễ tìm.</p>
   </div>
 </section>
 
-<section class="section section--tight">
-  <div class="container">
-    <% if (posts.length === 0) { %>
-      <div class="empty"><h3>Chưa có bài viết</h3><p>Nội dung sẽ sớm được cập nhật.</p></div>
-    <% } else { %>
-      <div class="blog-grid">
-        <% posts.forEach(function(post){ %>
-          <article class="blog-card">
-            <a class="blog-card__media frame" href="/blog/<%= post.slug %>">
-              <img src="<%= post.coverImg ? post.coverImg : '/img/ph/' + encodeURIComponent(post.title) + '?tone=' + post.cover %>" alt="<%= post.title %>" loading="lazy" width="800" height="500" />
-              <span class="blog-card__tag"><%= post.tag %></span>
-            </a>
-            <div class="blog-card__body">
-              <p class="blog-card__meta"><%= new Date(post.date).toLocaleDateString('vi-VN') %> · <%= post.readMinutes %> phút đọc</p>
-              <h2 class="blog-card__title"><a href="/blog/<%= post.slug %>"><%= post.title %></a></h2>
-              <p class="blog-card__excerpt"><%= post.excerpt %></p>
-              <a class="link-more" href="/blog/<%= post.slug %>">Đọc tiếp →</a>
-            </div>
-          </article>
-        <% }) %>
+<div class="container"><%- include('../partials/blog-nav', { activeCat: null }) %></div>
+
+<% if (groups.length === 0) { %>
+  <section class="section section--tight"><div class="container">
+    <div class="empty"><h3>Chưa có bài viết</h3><p>Nội dung sẽ sớm được cập nhật.</p></div>
+  </div></section>
+<% } else { %>
+  <% groups.forEach(function(g){ %>
+    <section class="section section--tight blog-section">
+      <div class="container">
+        <div class="section__head section__head--row">
+          <div>
+            <p class="eyebrow"><%= g.cat.name %></p>
+            <h2 class="section__title section__title--sm"><%= g.cat.desc %></h2>
+          </div>
+          <div class="blog-section__links">
+            <a class="link-more" href="/blog/chuyen-muc/<%= g.cat.slug %>">Tất cả bài <%= g.cat.name %> →</a>
+            <a class="link-more link-more--soft" href="/danh-muc/<%= g.cat.productCat %>">Mua sản phẩm →</a>
+          </div>
+        </div>
+        <div class="blog-grid">
+          <% g.posts.forEach(function(post){ %>
+            <%- include('../partials/blog-card', { post: post }) %>
+          <% }) %>
+        </div>
       </div>
-    <% } %>
-  </div>
-</section>
+    </section>
+  <% }) %>
+<% } %>

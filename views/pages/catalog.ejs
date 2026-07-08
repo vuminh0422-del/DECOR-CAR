@@ -7,7 +7,13 @@
     </nav>
     <p class="eyebrow"><%= category ? category.tagline : 'Tất cả sản phẩm' %></p>
     <h1 class="page-title"><%= category ? category.name : 'Cửa hàng' %></h1>
-    <% if (category) { %><p class="page-desc"><%= category.description %></p><% } %>
+    <% if (category) { %>
+      <p class="page-desc"><%= category.description %></p>
+      <% var _bc = blogCategoryForProduct(category.slug); %>
+      <% if (_bc) { %>
+        <p class="cat-blog-link">📖 Chưa biết chọn gì? <a href="/blog/chuyen-muc/<%= _bc.slug %>">Đọc kinh nghiệm về <%= category.name %> →</a></p>
+      <% } %>
+    <% } %>
   </div>
 </section>
 

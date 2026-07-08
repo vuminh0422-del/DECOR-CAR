@@ -1,0 +1,36 @@
+<section class="page-head">
+  <div class="container">
+    <nav class="crumbs" aria-label="breadcrumb">
+      <a href="/">Trang chủ</a><span>/</span><a href="/blog">Blog</a><span>/</span><span><%= cat.name %></span>
+    </nav>
+    <p class="eyebrow">Chuyên mục blog</p>
+    <h1 class="page-title"><%= cat.name %></h1>
+    <p class="page-desc"><%= cat.desc %></p>
+    <% if (productCat) { %>
+      <p class="blog-cat-shop">
+        Xem sản phẩm liên quan:
+        <a class="btn btn--line btn--sm" href="/danh-muc/<%= productCat.slug %>">Mua <%= productCat.name %> →</a>
+      </p>
+    <% } %>
+  </div>
+</section>
+
+<div class="container"><%- include('../partials/blog-nav', { activeCat: cat.slug }) %></div>
+
+<section class="section section--tight">
+  <div class="container">
+    <% if (posts.length === 0) { %>
+      <div class="empty">
+        <h3>Chưa có bài viết trong chuyên mục này</h3>
+        <p>Hãy quay lại sau hoặc xem các chuyên mục khác.</p>
+        <a class="btn btn--line" href="/blog">Về trang Blog</a>
+      </div>
+    <% } else { %>
+      <div class="blog-grid">
+        <% posts.forEach(function(post){ %>
+          <%- include('../partials/blog-card', { post: post }) %>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

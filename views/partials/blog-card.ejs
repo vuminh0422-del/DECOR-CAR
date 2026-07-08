@@ -1,0 +1,14 @@
+<article class="blog-card">
+  <a class="blog-card__media frame" href="/blog/<%= post.slug %>">
+    <img src="<%= post.coverImg ? post.coverImg : '/img/ph/' + encodeURIComponent(post.title) + '?tone=' + post.cover %>" alt="<%= post.title %>" loading="lazy" width="800" height="500" />
+    <span class="blog-card__tag"><%= post.tag %></span>
+  </a>
+  <div class="blog-card__body">
+    <p class="blog-card__meta">
+      <% if (post.category) { %><a class="blog-card__cat" href="/blog/chuyen-muc/<%= post.category %>"><%= blogCategoryName(post.category) %></a> · <% } %><%= new Date(post.date).toLocaleDateString('vi-VN') %> · <%= post.readMinutes %> phút đọc
+    </p>
+    <h2 class="blog-card__title"><a href="/blog/<%= post.slug %>"><%= post.title %></a></h2>
+    <p class="blog-card__excerpt"><%= post.excerpt %></p>
+    <a class="link-more" href="/blog/<%= post.slug %>">Đọc tiếp →</a>
+  </div>
+</article>

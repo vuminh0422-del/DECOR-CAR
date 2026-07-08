@@ -1,8 +1,11 @@
 <article class="post">
   <header class="post__head">
     <div class="container post__head-inner">
-      <nav class="crumbs"><a href="/">Trang chủ</a><span>/</span><a href="/blog">Blog</a><span>/</span><span><%= post.tag %></span></nav>
-      <p class="eyebrow"><%= post.tag %></p>
+      <nav class="crumbs"><a href="/">Trang chủ</a><span>/</span><a href="/blog">Blog</a><span>/</span>
+        <% if (cat) { %><a href="/blog/chuyen-muc/<%= cat.slug %>"><%= cat.name %></a><span>/</span><% } %>
+        <span><%= post.tag %></span>
+      </nav>
+      <p class="eyebrow"><% if (cat) { %><a href="/blog/chuyen-muc/<%= cat.slug %>"><%= cat.name %></a> · <% } %><%= post.tag %></p>
       <h1 class="post__title"><%= post.title %></h1>
       <p class="post__meta"><%= post.author %> · <%= new Date(post.date).toLocaleDateString('vi-VN') %> · <%= post.readMinutes %> phút đọc</p>
     </div>
@@ -47,17 +50,7 @@
     <div class="section__head"><p class="eyebrow">Đọc thêm</p><h2 class="section__title">Bài viết khác</h2></div>
     <div class="blog-grid">
       <% related.forEach(function(post){ %>
-        <article class="blog-card">
-          <a class="blog-card__media frame" href="/blog/<%= post.slug %>">
-            <img src="<%= post.coverImg ? post.coverImg : '/img/ph/' + encodeURIComponent(post.title) + '?tone=' + post.cover %>" alt="<%= post.title %>" loading="lazy" width="800" height="500" />
-            <span class="blog-card__tag"><%= post.tag %></span>
-          </a>
-          <div class="blog-card__body">
-            <p class="blog-card__meta"><%= new Date(post.date).toLocaleDateString('vi-VN') %> · <%= post.readMinutes %> phút đọc</p>
-            <h2 class="blog-card__title"><a href="/blog/<%= post.slug %>"><%= post.title %></a></h2>
-            <p class="blog-card__excerpt"><%= post.excerpt %></p>
-          </div>
-        </article>
+        <%- include('../partials/blog-card', { post: post }) %>
       <% }) %>
     </div>
   </div>

@@ -654,6 +654,22 @@ input, textarea, select, button { font-family: inherit; }
 .buybar__price { font-family: var(--font-display); color: var(--brass-deep); font-size: 1.1rem; }
 .buybar__form .btn { white-space: nowrap; }
 
+/* ---------- Blog: chuyên mục & mục con ---------- */
+.blog-nav { display: flex; flex-wrap: wrap; gap: .5rem; padding: 1.2rem 0 .4rem; border-bottom: 1px solid var(--line); }
+.blog-nav__item { font-size: .82rem; letter-spacing: .04em; padding: .5rem 1rem; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink-soft); transition: all .2s var(--ease); }
+.blog-nav__item:hover { border-color: var(--ink); color: var(--ink); }
+.blog-nav__item.is-active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.blog-section + .blog-section { padding-top: 0; }
+.blog-section__links { display: flex; flex-direction: column; align-items: flex-end; gap: .4rem; }
+.link-more--soft { color: var(--stone); }
+.link-more--soft:hover { color: var(--brass-deep); }
+.blog-card__cat { color: var(--brass-deep); font-weight: 600; }
+.blog-card__cat:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.blog-cat-shop { margin-top: 1.2rem; display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; font-size: .9rem; color: var(--ink-soft); }
+.cat-blog-link { margin-top: .9rem; font-size: .92rem; color: var(--ink-soft); }
+.cat-blog-link a { color: var(--brass-deep); font-weight: 600; border-bottom: 1px solid currentColor; }
+.cat-blog-link a:hover { color: var(--ink); }
+
 /* ---------- Trang chính sách ---------- */
 .policy-updated { margin-top: .8rem; font-size: .8rem; color: var(--stone); }
 .policy-layout { display: grid; grid-template-columns: 260px 1fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }

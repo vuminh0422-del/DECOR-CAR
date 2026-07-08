@@ -75,6 +75,47 @@ function brandName(slug) {
   return b ? b.name : '';
 }
 
+// Chuyên mục blog — chia theo từng NHÓM SẢN PHẨM, ánh xạ sang danh mục sản phẩm tương ứng
+// để liên kết nội bộ hai chiều (blog <-> cửa hàng).
+const BLOG_CATEGORIES = [
+  {
+    slug: 'noi-that',
+    name: 'Nội thất xe',
+    productCat: 'noi-that-xe',
+    desc: 'Bọc ghế da, ốp nội thất, vô lăng — kinh nghiệm chọn và nâng cấp khoang lái.',
+  },
+  {
+    slug: 'tham-lot',
+    name: 'Thảm lót sàn & cốp',
+    productCat: 'tham-lot-san',
+    desc: 'Chọn và bảo dưỡng thảm lót sàn, cốp và taplo vừa khít theo từng dòng xe.',
+  },
+  {
+    slug: 'den-cong-nghe',
+    name: 'Đèn & công nghệ',
+    productCat: 'den-phu-kien',
+    desc: 'Đèn ambient, camera hành trình, màn hình và sạc — mẹo chọn và lắp đặt.',
+  },
+  {
+    slug: 'cham-soc',
+    name: 'Chăm sóc & trang trí',
+    productCat: 'cham-soc-trang-tri',
+    desc: 'Vệ sinh nội thất, nước hoa, gối tựa và các phụ kiện tạo điểm nhấn.',
+  },
+];
+
+function blogCategoryBySlug(slug) {
+  return BLOG_CATEGORIES.find((c) => c.slug === slug) || null;
+}
+// Tìm chuyên mục blog theo slug danh mục SẢN PHẨM (để catalog trỏ sang blog liên quan)
+function blogCategoryForProduct(productCatSlug) {
+  return BLOG_CATEGORIES.find((c) => c.productCat === productCatSlug) || null;
+}
+function blogCategoryName(slug) {
+  const c = blogCategoryBySlug(slug);
+  return c ? c.name : '';
+}
+
 module.exports = {
   slugify,
   formatVND,
@@ -84,4 +125,8 @@ module.exports = {
   starString,
   CAR_BRANDS,
   brandName,
+  BLOG_CATEGORIES,
+  blogCategoryBySlug,
+  blogCategoryForProduct,
+  blogCategoryName,
 };

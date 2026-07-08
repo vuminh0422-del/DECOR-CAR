@@ -474,6 +474,28 @@ const blogPosts = [
   },
 ];
 
+// Gán chuyên mục blog (theo nhóm sản phẩm) cho từng bài.
+const blogCatMap = {
+  '5-mon-nang-cap-noi-that-xe-dang-tien': 'noi-that',
+  'boc-ghe-da-xe-hoi-chon-loai-da-nao': 'noi-that',
+  'op-noi-that-van-go-hay-van-carbon': 'noi-that',
+  'boc-vo-lang-da-khau-tay-co-dang-tien': 'noi-that',
+  'checklist-nang-cap-noi-that-theo-dong-xe': 'noi-that',
+  'tham-lot-san-6d-co-thuc-su-can-thiet': 'tham-lot',
+  'chon-tham-lot-cop-bao-ve-khoang-hanh-ly': 'tham-lot',
+  'den-ambient-noi-that-tinh-te-hay-loe-loet': 'den-cong-nghe',
+  'camera-hanh-trinh-vi-sao-moi-xe-nen-co': 'den-cong-nghe',
+  'man-hinh-android-o-to-co-nen-lap': 'den-cong-nghe',
+  'sac-dien-thoai-tren-o-to-an-toan': 'den-cong-nghe',
+  'nang-cap-anh-sang-khoang-lai': 'den-cong-nghe',
+  'nuoc-hoa-o-to-chon-huong-va-khu-mui': 'cham-soc',
+  'cham-soc-noi-that-da-o-to-dung-cach': 'cham-soc',
+  'goi-tua-dau-tua-lung-di-xa-khong-moi': 'cham-soc',
+};
+blogPosts.forEach((p) => {
+  p.category = blogCatMap[p.slug] || 'noi-that';
+});
+
 async function run() {
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@decorcar.vn';
   const adminPassword = process.env.ADMIN_PASSWORD || 'DecorCar@2026';

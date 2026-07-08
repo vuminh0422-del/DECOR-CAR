@@ -10,7 +10,10 @@ const methodOverride = require('method-override');
 
 const cartMiddleware = require('./src/middleware/cart');
 const { currentUser } = require('./src/middleware/auth');
-const { formatVND, ORDER_STATUS, starString, couponLabel, CAR_BRANDS, brandName } = require('./src/util');
+const {
+  formatVND, ORDER_STATUS, starString, couponLabel, CAR_BRANDS, brandName,
+  BLOG_CATEGORIES, blogCategoryName, blogCategoryForProduct,
+} = require('./src/util');
 const { renderPlaceholder } = require('./src/placeholder');
 const { POLICIES } = require('./src/content/policies');
 const db = require('./src/db/database');
@@ -71,6 +74,9 @@ app.use((req, res, next) => {
   res.locals.categories = db.categories(); // dùng ở header/footer mọi trang
   res.locals.carBrands = CAR_BRANDS; // bộ chọn "Tìm đồ theo dòng xe"
   res.locals.brandName = brandName;
+  res.locals.blogCategories = BLOG_CATEGORIES; // chuyên mục blog (footer, nav)
+  res.locals.blogCategoryName = blogCategoryName;
+  res.locals.blogCategoryForProduct = blogCategoryForProduct;
   res.locals.ratingFor = db.ratingFor; // để card sản phẩm hiển thị sao + số đánh giá
   res.locals.formatVND = formatVND;
   res.locals.starString = starString;
@@ -131,6 +137,7 @@ app.get('/sitemap.xml', (req, res) => {
   urls.push(url('/cau-hoi-thuong-gap', null, '0.5'));
   db.categories().forEach((c) => urls.push(url('/danh-muc/' + c.slug, null, '0.8')));
   db.products().forEach((p) => urls.push(url('/san-pham/' + p.slug, p.createdAt, '0.8')));
+  BLOG_CATEGORIES.forEach((c) => urls.push(url('/blog/chuyen-muc/' + c.slug, null, '0.5')));
   db.blogPosts().forEach((p) => urls.push(url('/blog/' + p.slug, p.date, '0.6')));
   POLICIES.forEach((p) => urls.push(url('/chinh-sach/' + p.slug, p.updated, '0.3')));
 

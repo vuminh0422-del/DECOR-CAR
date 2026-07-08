@@ -1,0 +1,6 @@
+<nav class="blog-nav" aria-label="Chuyên mục blog">
+  <a href="/blog" class="blog-nav__item <%= !activeCat ? 'is-active' : '' %>">Tất cả</a>
+  <% blogCategories.forEach(function(c){ %>
+    <a href="/blog/chuyen-muc/<%= c.slug %>" class="blog-nav__item <%= activeCat === c.slug ? 'is-active' : '' %>"><%= c.name %></a>
+  <% }) %>
+</nav>
