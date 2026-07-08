@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
+const { POLICIES, FAQS, policyBySlug } = require('../content/policies');
 
 // Trang chủ
 router.get('/', (req, res) => {
@@ -154,6 +155,27 @@ router.post('/san-pham/:slug/danh-gia', (req, res) => {
     });
   }
   res.redirect('/san-pham/' + product.slug + '?danhgia=ok#danh-gia');
+});
+
+// Trang chính sách (data-driven)
+router.get('/chinh-sach/:slug', (req, res) => {
+  const policy = policyBySlug(req.params.slug);
+  if (!policy) {
+    return res.status(404).render('pages/error', {
+      title: 'Không tìm thấy trang',
+      message: 'Trang chính sách bạn tìm không tồn tại.',
+    });
+  }
+  res.render('pages/policy', {
+    title: policy.title + ' — DECOR CAR',
+    policy,
+    policies: POLICIES,
+  });
+});
+
+// Câu hỏi thường gặp
+router.get('/cau-hoi-thuong-gap', (req, res) => {
+  res.render('pages/faq', { title: 'Câu hỏi thường gặp — DECOR CAR', faqs: FAQS });
 });
 
 // Giới thiệu

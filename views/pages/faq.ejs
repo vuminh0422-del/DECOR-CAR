@@ -1,0 +1,50 @@
+<section class="page-head page-head--slim">
+  <div class="container">
+    <nav class="crumbs" aria-label="breadcrumb">
+      <a href="/">Trang chủ</a><span>/</span><span>Câu hỏi thường gặp</span>
+    </nav>
+    <p class="eyebrow">Hỗ trợ</p>
+    <h1 class="page-title">Câu hỏi thường gặp</h1>
+    <p class="page-desc">Những thắc mắc phổ biến về sản phẩm, giao hàng, lắp đặt, bảo hành và thanh toán tại DECOR CAR.</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container faq-wrap">
+    <div class="faq-list">
+      <% faqs.forEach(function(item, i){ %>
+        <details class="faq-item" <%= i === 0 ? 'open' : '' %>>
+          <summary class="faq-q">
+            <span><%= item.q %></span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a"><p><%= item.a %></p></div>
+        </details>
+      <% }) %>
+    </div>
+
+    <div class="faq-cta">
+      <h2 class="section__title section__title--sm">Chưa tìm thấy câu trả lời?</h2>
+      <p>Liên hệ trực tiếp để được tư vấn theo đúng dòng xe và nhu cầu của bạn.</p>
+      <div class="policy-contact__links">
+        <a class="btn btn--primary btn--sm" href="tel:<%= store.phone.replace(/\s/g,'') %>">Gọi <%= store.phone %></a>
+        <a class="btn btn--line btn--sm" href="https://zalo.me/<%= store.zalo %>">Nhắn Zalo</a>
+        <a class="btn btn--line btn--sm" href="/lien-he">Gửi liên hệ</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json">
+<%- JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(function(f){
+    return {
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a }
+    };
+  })
+}) %>
+</script>

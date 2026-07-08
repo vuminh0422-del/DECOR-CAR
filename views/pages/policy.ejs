@@ -1,0 +1,53 @@
+<section class="page-head page-head--slim">
+  <div class="container">
+    <nav class="crumbs" aria-label="breadcrumb">
+      <a href="/">Trang chủ</a><span>/</span><span><%= policy.title %></span>
+    </nav>
+    <p class="eyebrow"><%= policy.tag %></p>
+    <h1 class="page-title"><%= policy.title %></h1>
+    <p class="page-desc"><%= policy.intro %></p>
+    <p class="policy-updated">Cập nhật lần cuối: <%= new Date(policy.updated).toLocaleDateString('vi-VN') %></p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container policy-layout">
+    <aside class="policy-nav" aria-label="Danh sách chính sách">
+      <h2>Chính sách &amp; hỗ trợ</h2>
+      <ul>
+        <% policies.forEach(function(p){ %>
+          <li>
+            <a href="/chinh-sach/<%= p.slug %>" class="<%= p.slug === policy.slug ? 'is-active' : '' %>"><%= p.title %></a>
+          </li>
+        <% }) %>
+        <li><a href="/cau-hoi-thuong-gap">Câu hỏi thường gặp</a></li>
+      </ul>
+    </aside>
+
+    <article class="policy-body">
+      <% policy.sections.forEach(function(sec){ %>
+        <section class="policy-section">
+          <h2><%= sec.h %></h2>
+          <% sec.blocks.forEach(function(b){ %>
+            <% if (typeof b === 'string') { %>
+              <p><%= b %></p>
+            <% } else if (b.list) { %>
+              <ul class="policy-list">
+                <% b.list.forEach(function(item){ %><li><%= item %></li><% }) %>
+              </ul>
+            <% } %>
+          <% }) %>
+        </section>
+      <% }) %>
+
+      <div class="policy-contact">
+        <p><b>Cần hỗ trợ thêm?</b> Đội ngũ CSKH DECOR CAR luôn sẵn sàng.</p>
+        <div class="policy-contact__links">
+          <a class="btn btn--primary btn--sm" href="tel:<%= store.phone.replace(/\s/g,'') %>">Gọi <%= store.phone %></a>
+          <a class="btn btn--line btn--sm" href="mailto:<%= store.email %>">Email CSKH</a>
+          <a class="btn btn--line btn--sm" href="/lien-he">Gửi liên hệ</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
