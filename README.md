@@ -12,14 +12,16 @@ Xây dựng bằng **Node.js + Express + EJS** (server-side rendering, tốt cho
 
 **Cửa hàng (khách hàng)**
 - Trang chủ với hero, danh mục, sản phẩm nổi bật & mới nhất
-- Danh mục + tìm kiếm + **lọc theo khoảng giá** + sắp xếp (giá, tên, mới nhất)
-- Trang chi tiết sản phẩm: thư viện ảnh, chọn số lượng, sản phẩm liên quan
+- **Tìm đồ theo dòng xe** (chọn hãng) + tìm kiếm + lọc giá / còn hàng + sắp xếp
+- Card sản phẩm: sao đánh giá, tình trạng tồn kho, hover đổi ảnh
+- Trang chi tiết: thư viện ảnh, thông số tương thích xe, **gợi ý mua kèm**, sản phẩm liên quan
 - **Đánh giá sản phẩm**: chấm sao + viết nhận xét, hiển thị điểm trung bình
 - Giỏ hàng (cập nhật số lượng, xoá) + **áp mã giảm giá**, lưu theo phiên
 - Thanh toán: **COD** + **chuyển khoản**, có sẵn điểm tích hợp **VNPay/Momo**
 - Tài khoản: đăng ký / đăng nhập, xem lịch sử đơn hàng
-- **Blog** kinh nghiệm độ & chăm sóc nội thất xe
-- Trang giới thiệu, liên hệ
+- **Blog** + **trang chính sách** (giao hàng, bảo hành, đổi trả, bảo mật, điều khoản) + **FAQ**
+- Đăng ký nhận ưu đãi, link mạng xã hội, **SEO JSON-LD** (Product/Review/FAQ)
+- Trang giới thiệu, liên hệ; thanh mua nhanh dính đáy trên mobile
 
 **Quản trị (admin)**
 - Bảng tổng quan: doanh thu, số đơn, sản phẩm
@@ -41,7 +43,7 @@ npm install
 # 2. Tạo file cấu hình từ mẫu rồi chỉnh sửa
 cp .env.example .env
 
-# 3. Tạo dữ liệu mẫu (16 sản phẩm + tài khoản admin)
+# 3. Tạo dữ liệu mẫu (18 sản phẩm + tài khoản admin)  — BẮT BUỘC, vì data.json bị gitignore
 npm run seed
 
 # 4. Chạy
@@ -178,14 +180,20 @@ decor-car/
 ├── ecosystem.config.js    # Cấu hình PM2
 ├── deploy/nginx.conf.example
 ├── src/
-│   ├── util.js            # slugify, định dạng tiền, nhãn trạng thái
+│   ├── util.js            # slugify, định dạng tiền, CAR_BRANDS (hãng xe)
 │   ├── placeholder.js     # Sinh ảnh SVG khi sản phẩm chưa có ảnh
+│   ├── content/           # policies.js — nội dung trang chính sách & FAQ
 │   ├── db/                # database.js (JSON store) + seed.js
 │   ├── middleware/        # cart.js, auth.js
 │   └── routes/            # shop, blog, cart, checkout, account, admin
 ├── views/                 # EJS: layout, partials, pages, admin
-└── public/                # css, js, img, uploads, favicon
+└── public/                # css, js, favicon
+    ├── img/products/      # Ảnh sản phẩm thật (được commit)
+    └── uploads/           # Ảnh admin upload lúc chạy (gitignore)
 ```
+
+> 📄 Xem **`CLAUDE.md`** ở thư mục gốc để nắm nhanh ngữ cảnh, quy ước và các lưu ý quan trọng
+> khi tiếp tục phát triển (đặc biệt: `data.json` bị gitignore nên phải `npm run seed`).
 
 ---
 
